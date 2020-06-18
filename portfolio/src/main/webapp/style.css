@@ -1,15 +1,96 @@
+@import url('https://fonts.googleapis.com/css?family=Yellowtail');
+
+*
+{
+   font-size: 18px;
+   color: #000 !important;
+   font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+h1 { 
+  text-shadow: 1px 1px 1px #ccc;
+}
+
+h2 { 
+  text-shadow: 0.5px 0.5px 0.5px #ccc;
+}
+
+body {
+  background: linear-gradient(55deg, rgb(238, 122, 122), rgb(103, 103, 255));
+}
+
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 650px;
+  width: 700px;
+  height: 1000px;
 }
 
-#greeting-container {
-  margin-top: 20px;
+#fact-container {
+  text-align: center;
 }
 
 .center {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.tabs {
+  border: 1px solid #ffffff;
+  display: flex;
+}
+
+.tabs__sidebar{
+  width: 150px;
+  flex-shrink: 0;
+  background: #ebc1ff00;
+}
+
+.tabs__button {
+  display: block;
+  padding: 10px;
+  background: #f1d2ffcc;
+  border: none;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+}
+
+.tabs__button:active{
+  background: #dddddd;
+}
+
+.tabs__button:not(:last-of-type){
+  border-bottom: 1px solid #cccccc;
+}
+
+.tabs__button--active{
+  font-weight: bold;
+  border-right: 4px solid #52b1ff;
+  background: #dddddd;
+}
+
+.tabs__content{
+  padding: 15px;
+  font-size: 0.8rem;
+  display: none;
+}
+
+.tabs__content--active{
+  display: block;
+}
+
+.tabs__content > :first-child {
+  margin-top: 0;
+}
+
+.button_wrapper {
+  text-align: center;
+}
+
+.button {
+  background-color: rgb(125, 201, 245);
+  border: none;
+  box-shadow: 1px 2px;
 }
