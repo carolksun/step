@@ -8,55 +8,29 @@
     <script src="script.js"></script>
   </head>
   <body>
-    <div id="content">
-      <h1 style="font-size:40px;"> Carol's Portfolio</h1>
-      <div class="tabs">
-        <div class="tabs__sidebar">
-          <button class="tabs__button" data-for-tab = "1">About Me</button>
-          <button class="tabs__button" data-for-tab = "2">Background</button>
-          <button class="tabs__button" data-for-tab = "3">Photos</button>
-          <button class="tabs__button" data-for-tab = "4">Contact Me</button>
-
-        </div>
-        <div class = "tabs__content" data-tab ="1">
-          <h2> About Me </h2>
-          <p>Hi! I'm Carol Sun! Here's a picture of me.</p>
+    <div class = "container">
+      <div class = "menu">
+        <ul>
+          <li class = "logo"> <a href="index.html"> <img src="images/logo.jpg"> </a> </li>
+          <li class = "active"><a href="index.html"> About Me</a></li>
+          <li> <a href="background.html"> Background</a></li>
+          <li> <a href="photos.html"> Photos </a> </li>
+          <li> <a href="contact.html"> Contact Me </a> </li>
+        </ul>
+      </div>
+    </div>
+    <div class="banner">
+        <h2> About Me </h2>
+          <p>Hi! I'm Carol Sun! Here is a picture of me.</p>
           <img src="images/Profile Pic.jpg" alt="Me" height="300" class = "center"/>
-          <p>I am currently a STEP intern and a rising junior at Caltech. I live in the 
-              Los Angeles area and I like to cook and garden in my free time!</p>
+            <p>I am currently a STEP intern and a rising junior at Caltech. I live in the 
+            Los Angeles area and I like to cook and garden in my free time!</p>
           <p style="text-align:center"> Click here to get a random fact!:</p>
           <div class="button_wrapper">
             <button onclick="addRandomFact()" class = "button"> Fun Facts! </button> 
           </div>
           <br>
           <div id="fact-container" class = "center"></div>
-        </div>
-        <div class = "tabs__content" data-tab ="2">
-          <h2> Background </h2>
-          <p> I am a computer science major at Caltech, expecting to graduate in June 2022. So far, some of the theoretical CS classes I have taken are algorithms, decidability and tractability, and learning systems. Some of the practical CS classes I've taken are data structures, software design, and machine learning. I'm excited to be taking some more in-depth CS classes in my next two years at Caltech, including operating systems, information theory, and databases. 
-          </p>
-          <p>
-          I've been lucky to have had a few internships before and during college, including a summer research project at the National Institutes of Health studying Multiple Sclerosis, an internship at OpenX, an ad tech company, developing machine learning models to predict profits, and now at Google, as a STEP intern. As for the future, I am considering going to graduate school or working in industry.
-          </p>
-        </div>
-        <div class = "tabs__content" data-tab ="3">
-          <h2> Photos </h2>
-          <p> Here are some of my graphic design pieces.</p>
-          <img src="images/tall trees.jpg" alt="Tall Trees" height="246"/>
-          <img src="images/feature.jpg" alt="Waterfall" height="246"/>
-          <br>
-          <img src="images/pic04.jpg" alt="Ocean" height="246"/>
-          <img src="images/complementary.jpg" alt="Flowers" height="246"/>
-          
-        </div>
-        <div class = "tabs__content" data-tab ="4">
-          <h2> Contact Me </h2>
-          <p> I have a more visually appealing website located <a href="https://carolksun.github.io">here</a>.
-          </p>
-          <p> Feel free to check out my <a href="https://www.linkedin.com/in/carolkailesun">Linkedin</a> and <a href="http://www.github.com/carolksun">Github</a>!
-          </p>
-        </div>
-      </div>
     </div>
   </body>
 </html>
