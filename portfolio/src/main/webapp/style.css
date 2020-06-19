@@ -1,7 +1,6 @@
 
 *
 {
-   font-size: 18px;
    color: #000;
    font-family: Georgia, 'Times New Roman', Times, serif !important;
 }
@@ -15,7 +14,10 @@ html, body {min-height: 100%;}
 
 .menu ul{
   display: inline-flex;
-  margin: 50px;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  font-size: 18px;
+  vertical-align: middle;
 }
 
 .menu ul li{
@@ -31,53 +33,20 @@ html, body {min-height: 100%;}
   margin-right:14px;
 }
 
-.active{
-  color: #e5e2f1 !important;
-}
-
-.about-text{
-  width: 50%;
-  float: left;
-}
-
-.about-text h1{
-  font-size: 43px;
-  width: 640px;
-  position: relative;
-  margin-left: 40px;
-}
-
-.about-text p{
-  width: 650px;
-  font-size: 15px;
-  margin: 30px 0 30px 40px;
-  line-height: 25px;
-  color: #000000;
-}
-
-.about-picture{
-  width: 50%;
-  float: right;
-}
-
-.about-picture img{
-  width: 100%;
-  margin-top: -20px;
-  padding-left: 50px;
+.currentLink {
+  color: white;
 }
 
 h1 { 
   text-shadow: 1px 1px 1px #ccc;
-  text-align: center
+  text-align: center;
+  font-size: 33px;
 }
 
-h2 { 
-  text-shadow: 0.5px 0.5px 0.5px #ccc;
-  text-align: center
-}
 
 p {
-  text-align: center
+  text-align: center;
+  font-size: 18px;
 }
 
 body {
@@ -101,55 +70,6 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
-}
-
-.tabs {
-  border: 1px solid #ffffff;
-  display: flex;
-}
-
-.tabs__sidebar{
-  width: 150px;
-  flex-shrink: 0;
-  background: #ebc1ff00;
-}
-
-.tabs__button {
-  display: block;
-  padding: 10px;
-  background: #f1d2ffcc;
-  border: none;
-  width: 100%;
-  outline: none;
-  cursor: pointer;
-}
-
-.tabs__button:active{
-  background: #dddddd;
-}
-
-.tabs__button:not(:last-of-type){
-  border-bottom: 1px solid #cccccc;
-}
-
-.tabs__button--active{
-  font-weight: bold;
-  border-right: 4px solid #52b1ff;
-  background: #dddddd;
-}
-
-.tabs__content{
-  padding: 15px;
-  font-size: 0.8rem;
-  display: none;
-}
-
-.tabs__content--active{
-  display: block;
-}
-
-.tabs__content > :first-child {
-  margin-top: 0;
 }
 
 .button_wrapper {
