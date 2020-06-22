@@ -56,3 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
     tabsContainer.querySelector(".tabs__sidebar .tabs__button").click();
   })
 });
+
+async function getDataServeletData() {
+  const response = await fetch('/data');
+  const data_text = await response.text();
+  document.getElementById('data-container').innerText = data_text;
+}
