@@ -62,3 +62,26 @@ async function getDataServeletData() {
   const data_text = await response.text();
   document.getElementById('data-container').innerText = data_text;
 }
+
+/**
+ * Fetches messages from the data servelet and adds them to the DOM.
+ */
+function getDataJson() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+    const messageListElement = document.getElementById('data-json-container');
+    messageListElement.innerHTML = '';
+    messageListElement.appendChild(
+        createListElement(messages[0]));
+    messageListElement.appendChild(
+        createListElement(messages[1]));
+    messageListElement.appendChild(
+        createListElement(messages[2]));
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
