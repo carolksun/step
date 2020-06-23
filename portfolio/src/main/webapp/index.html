@@ -32,9 +32,17 @@
             <br>
             <div id="fact-container" class = "center"></div>
 
-            <p>Click here for the data servlet json:</p>
+            <form action="/data" method="POST" >
+
+            <p>Enter a comment!:</p>
+            <textarea name="text-input"></textarea>
+            <br/><br/>
+            <input type="submit"/>
+            </form>
+            <br>
+            <br>
             <div class="button_wrapper">
-                <button onclick="getDataJson()" class = "button">Get the Json!</button>
+                <button onclick="getDataJson()" class = "button"> View Comments </button>
                 <div id="data-json-container" class = "center"></div>
             </div>
 

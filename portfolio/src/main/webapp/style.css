@@ -92,3 +92,7 @@ body {
   padding-left: 10px;
   padding-bottom: 8px;
 }
+
+form {
+  text-align: center;
+}

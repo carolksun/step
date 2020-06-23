@@ -70,12 +70,9 @@ function getDataJson() {
   fetch('/data').then(response => response.json()).then((messages) => {
     const messageListElement = document.getElementById('data-json-container');
     messageListElement.innerHTML = '';
-    messageListElement.appendChild(
-        createListElement(messages[0]));
-    messageListElement.appendChild(
-        createListElement(messages[1]));
-    messageListElement.appendChild(
-        createListElement(messages[2]));
+    messages.forEach((m) => {
+      messageListElement.appendChild(createListElement(m));
+    });
   });
 }
 
