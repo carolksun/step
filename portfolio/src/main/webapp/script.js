@@ -16,10 +16,14 @@
  * Adds a random greeting to the page.
  */
 function addRandomFact() {
+  // Pick a random fact.
   const facts =
-      ['I\'ve lived in LA my whole life', 'I have surpassed level 3000 on Candy Crush Saga', 'I have an older sister', 'My favorite fruit is watermelon'];
+      ["I've lived in LA my whole life", 
+       "I have surpassed level 3000 on Candy Crush Saga", 
+       "I have an older sister", 
+       "My favorite fruit is watermelon"];
 
-  // Pick a random greeting.
+
   const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
