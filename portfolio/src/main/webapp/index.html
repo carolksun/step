@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload = loadComments()>
     <div class = "container">
       <div class = "menu">
         <ul>
@@ -32,19 +32,14 @@
             <br>
             <div id="fact-container" class = "center"></div>
 
-            <form action="/data" method="POST" >
-
-            <p>Enter a comment!:</p>
-            <textarea name="text-input"></textarea>
-            <br/><br/>
-            <input type="submit"/>
+            <form method="POST" action="/data">
+            <input type="text" name="text" />
+            <br/>
+            <button>Submit</button>
             </form>
-            <br>
-            <br>
-            <div class="button_wrapper">
-                <button onclick="getDataJson()" class = "button"> View Comments </button>
-                <div id="data-json-container" class = "center"></div>
-            </div>
+            <hr/>
+
+    <ul id="comments-container"></ul>
 
     </div>
   </body>

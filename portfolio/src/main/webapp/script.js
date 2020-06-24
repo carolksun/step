@@ -27,58 +27,24 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
-function setupTabs (){
-  document.querySelectorAll(".tabs__button").forEach(button => {
-    button.addEventListener("click", () => {
-      const sideBar = button.parentElement;
-      const tabsContainer = sideBar.parentElement;
-      const tabNumber = button.dataset.forTab;
-      const tabToActivate = tabsContainer.querySelector(`.tabs__content[data-tab = "${tabNumber}"]`);
-
-      sideBar.querySelectorAll(".tabs__button").forEach(button => {
-        button.classList.remove("tabs__button--active");
-      });
-
-      tabsContainer.querySelectorAll(".tabs__content").forEach(tab => {
-        tab.classList.remove("tabs__content--active");
-      });
-
-      button.classList.add("tabs__button--active");
-      tabToActivate.classList.add("tabs__content--active");
-    });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  setupTabs();
-
-  document.querySelectorAll(".tabs").forEach(tabsContainer => {
-    tabsContainer.querySelector(".tabs__sidebar .tabs__button").click();
-  })
-});
-
-async function getDataServeletData() {
-  const response = await fetch('/data');
-  const data_text = await response.text();
-  document.getElementById('data-container').innerText = data_text;
-}
-
-/**
- * Fetches messages from the data servelet and adds them to the DOM.
- */
-function getDataJson() {
+function loadComments() {
   fetch('/data').then(response => response.json()).then((messages) => {
-    const messageListElement = document.getElementById('data-json-container');
-    messageListElement.innerHTML = '';
+    const messageListElement = document.getElementById('comments-container');
     messages.forEach((m) => {
-      messageListElement.appendChild(createListElement(m));
+      messageListElement.appendChild(createCommentElement(m));
     });
   });
 }
 
-/** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+function createCommentElement(comment) {
+  const coElement = document.createElement('li');
+  coElement.className = 'comment';
+
+  const textElement = document.createElement('span');
+  textElement.innerText = comment.text;
+
+  coElement.appendChild(textElement);
+  return coElement;
 }
+
+
