@@ -83,3 +83,4 @@ function deleteComment(comment) {
   params.append('id', comment.id);
   fetch('/delete-data', {method: 'POST', body: params});
 }
+
