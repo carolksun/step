@@ -32,15 +32,20 @@
             <br>
             <div id="fact-container" class="center"> </div>
 
-            <form method="POST" action="/data">
-            <input type="text" name="text" />
-            <br/>
-            <button>Submit</button>
-            </form>
-            <hr/>
-
-    <ul id="comments-container"></ul>
-
+        <h2> Comments Section </h2>
+        <p> Submit a Comment! </p>
+        <form method="POST" action="/data">
+        <input type="text" name="text" />
+        <br/>
+        <button>Submit</button>
+        </form>
+        <p> # of Comments Shown: <input type="number" id="comment-choice" min="1" value="5" onchange=loadComments() class="center"> </p>
+        <div id="comments-container" class="center"> </div>
+        
     </div>
   </body>
 </html>
+
+
+
+
