@@ -13,16 +13,15 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fact to the page.
  */
 function addRandomFact() {
-  // Pick a random fact.
+  // List of facts to choose from.
   const facts =
       ["I've lived in LA my whole life", 
        "I have surpassed level 3000 on Candy Crush Saga", 
        "I have an older sister", 
        "My favorite fruit is watermelon"];
-
 
   const fact = facts[Math.floor(Math.random() * facts.length)];
 
@@ -31,6 +30,11 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
+/**
+ * Load a specified number of comments to the comments section
+ * If the specified number is greater than the total number of comments, all
+ * comments are shown.
+ */
 function loadComments() {
   fetch('/data').then(response => response.json()).then((messages) => {
     const messageListElement = document.getElementById('comments-container');
@@ -48,6 +52,11 @@ function loadComments() {
   });
 }
 
+/**
+ * Create comment on the page with a delete button
+ * After a comment is deleted, the comments are reloaded with the correct 
+ * number of comments shown.
+ */
 function createCommentElement(comment) {
   const coElement = document.createElement('li');
   coElement.className = 'comment';
@@ -59,10 +68,8 @@ function createCommentElement(comment) {
   deleteButtonElement.innerText = 'Delete';
   deleteButtonElement.addEventListener('click', () => {
     deleteComment(comment);
-
-    // Remove the task from the DOM.
     coElement.remove();
-    loadComments();
+    fetch("/data").then(loadComments()) ;
   });
 
   coElement.appendChild(textElement);
@@ -70,12 +77,9 @@ function createCommentElement(comment) {
   return coElement;
 }
 
-/** Tells the server to delete the task. */
+/** Tells the server to delete the comment. */
 function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
   fetch('/delete-data', {method: 'POST', body: params});
 }
-
-
-
