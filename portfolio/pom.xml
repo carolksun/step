@@ -47,7 +47,7 @@
         <version>2.2.0</version>
         <configuration>
           <deploy.projectId>cksun-step-2020</deploy.projectId>
-          <deploy.version>1</deploy.version>
+          <deploy.version>pr3</deploy.version>
         </configuration>
       </plugin>
     </plugins>
