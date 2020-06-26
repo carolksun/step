@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;  
 
-/** Servlet that deletes the entity that has the corresponding id.*/
+/** Servlet that deletes the entity that has the corresponding id. */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
@@ -39,4 +39,3 @@ public class DeleteDataServlet extends HttpServlet {
         datastore.delete(commentEntityKey);
     }
 }
-
