@@ -28,15 +28,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;  
+import java.util.ArrayList;
+import java.util.List;
+
 
 /** Servlet that handles comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+    private final String com = "Comment";
+    private final String ts = "timestamp";
+    private final String txt = "text";
 
+    /** Store each text input from the server as a Comment class, which has 
+        properties id, text, and timestamp. */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        Query query = new Query(com).addSort(ts, SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
@@ -44,8 +51,8 @@ public class DataServlet extends HttpServlet {
         List<Comment> comments = new ArrayList<>();
         for (Entity entity : results.asIterable()) {
             long id = entity.getKey().getId();
-            String text = (String) entity.getProperty("text");
-            long timestamp = (long) entity.getProperty("timestamp");
+            String text = (String)entity.getProperty(txt);
+            long timestamp = (long)entity.getProperty(ts);
 
             Comment comment = new Comment(id, text, timestamp);
             comments.add(comment);
@@ -53,19 +60,19 @@ public class DataServlet extends HttpServlet {
 
         Gson gson = new Gson();
 
-        response.setContentType("application/json;");
+        response.setContentType("application/json");
         response.getWriter().println(gson.toJson(comments));
     }
 
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String text = request.getParameter("text");
+        String text = request.getParameter(txt);
         long timestamp = System.currentTimeMillis();
 
-        Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("text", text);
-        commentEntity.setProperty("timestamp", timestamp);
+        Entity commentEntity = new Entity(com);
+        commentEntity.setProperty(txt, text);
+        commentEntity.setProperty(ts, timestamp);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);

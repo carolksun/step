@@ -41,7 +41,6 @@ function loadComments() {
     messageListElement.innerHTML = "";
     var numCommentsShown = document.getElementById('comment-choice').value; 
     var numComments = messages.length;
-    console.log(numComments);
     if (numComments < numCommentsShown){
         numCommentsShown = numComments;
     }
