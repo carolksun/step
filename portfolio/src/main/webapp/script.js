@@ -16,18 +16,18 @@
  * Adds a random fact to the page.
  */
 function addRandomFact() {
-  // List of facts to choose from.
-  const facts =
-      ["I've lived in LA my whole life", 
-       "I have surpassed level 3000 on Candy Crush Saga", 
-       "I have an older sister", 
-       "My favorite fruit is watermelon"];
+    // List of facts to choose from.
+    const facts =
+        ["I've lived in LA my whole life", 
+        "I have surpassed level 3000 on Candy Crush Saga", 
+        "I have an older sister", 
+        "My favorite fruit is watermelon"];
 
-  const fact = facts[Math.floor(Math.random() * facts.length)];
+    const fact = facts[Math.floor(Math.random() * facts.length)];
 
-  // Add it to the page.
-  const factContainer = document.getElementById('fact-container');
-  factContainer.innerText = fact;
+    // Add it to the page.
+    const factContainer = document.getElementById('fact-container');
+    factContainer.innerText = fact;
 }
 
 /**
@@ -36,19 +36,17 @@ function addRandomFact() {
  * comments are shown.
  */
 function loadComments() {
-  fetch('/data').then(response => response.json()).then((messages) => {
-    const messageListElement = document.getElementById('comments-container');
-    messageListElement.innerHTML = "";
-    var numCommentsShown = document.getElementById('comment-choice').value; 
-    var numComments = messages.length;
-    if (numComments < numCommentsShown){
-        numCommentsShown = numComments;
-    }
-    var i;
-    for (i = 0; i < numCommentsShown; i++) {
-        messageListElement.appendChild(createCommentElement(messages[i]));
-    }
-  });
+    var numCommentsShown = parseInt(document.getElementById('comment-choice').value);
+
+    fetch("/data?limit=".concat(numCommentsShown))
+    .then(response => response.json())
+    .then((messages) => {
+        const messageListElement = document.getElementById('comments-container');
+        messageListElement.innerHTML = "";
+        messages.forEach((comment) => {
+            messageListElement.appendChild(createCommentElement(comment));
+        });
+    });
 }
 
 /**
@@ -57,28 +55,28 @@ function loadComments() {
  * number of comments shown.
  */
 function createCommentElement(comment) {
-  const coElement = document.createElement('li');
-  coElement.className = 'comment';
+    const coElement = document.createElement('li');
+    coElement.className = 'comment';
 
-  const textElement = document.createElement('span');
-  textElement.innerText = comment.text;
+    const textElement = document.createElement('span');
+    textElement.innerText = comment.text;
 
-  const deleteButtonElement = document.createElement('button');
-  deleteButtonElement.innerText = 'Delete';
-  deleteButtonElement.addEventListener('click', () => {
-    deleteComment(comment);
-    coElement.remove();
-    fetch("/data").then(loadComments()) ;
-  });
+    const deleteButtonElement = document.createElement('button');
+    deleteButtonElement.innerText = 'Delete';
+    deleteButtonElement.addEventListener('click', () => {
+        deleteComment(comment);
+        coElement.remove();
+        fetch("/data").then(loadComments()) ;
+    });
 
-  coElement.appendChild(textElement);
-  coElement.appendChild(deleteButtonElement);
-  return coElement;
+    coElement.appendChild(textElement);
+    coElement.appendChild(deleteButtonElement);
+    return coElement;
 }
 
 /** Tells the server to delete the comment. */
 function deleteComment(comment) {
-  const params = new URLSearchParams();
-  params.append('id', comment.id);
-  fetch('/delete-data', {method: 'POST', body: params});
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/delete-data', {method: 'POST', body: params});
 }

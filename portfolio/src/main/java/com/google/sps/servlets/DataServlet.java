@@ -43,13 +43,19 @@ public class DataServlet extends HttpServlet {
         properties id, text, and timestamp. */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int limit = Integer.parseInt(request.getParameter("limit"));
         Query query = new Query(com).addSort(ts, SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
         List<Comment> comments = new ArrayList<>();
+        int i = 0;
         for (Entity entity : results.asIterable()) {
+            if (i == limit) {
+                break;
+            } 
+            i++;
             long id = entity.getKey().getId();
             String text = (String)entity.getProperty(txt);
             long timestamp = (long)entity.getProperty(ts);
