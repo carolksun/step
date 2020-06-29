@@ -251,3 +251,31 @@ function drawScoreChart() {
 function drawMinChart() {
   drawChart(false);
 }
+
+var markers = [];
+var map;
+
+function createMap() {
+    console.log(locations);
+    
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 1.55,
+        center: {lat: 30, lng: 0}
+    });
+
+    for (var i = 0; i < locations.length; i++) {
+        addMarkerWithTimeout(locations[i], i * 200);
+    }
+}
+
+function addMarkerWithTimeout(position, timeout) {
+        window.setTimeout(function() {
+          markers.push(new google.maps.Marker({
+            position: new google.maps.LatLng(position[1], position[2]),
+            map: map,
+            animation: google.maps.Animation.DROP,
+            title: position[0]
+          }));
+        }, timeout);
+      }
+

@@ -10,7 +10,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="script.js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCquKXcwHNhkMx8qPuRIzIsw15ixHt4HLw"></script>
+		<script type="text/javascript" src="locations.js"></script>
+		<script type="text/javascript" src="script.js"></script>
   </head>
   <body>
     <header>
@@ -229,6 +231,13 @@
           </tr>
         </table>
       </div>
+    </section>
+
+    <section class="map" id="map">
+      <h1> Oh, all the places I've gone! </h1>
+      <p> I've been to 66 cities, 16 states, and 18 countries! Check out the cities
+        I've visited on the map.
+			<div id="map"></div>
     </section>
 
     <section class="comments" id="comments">
