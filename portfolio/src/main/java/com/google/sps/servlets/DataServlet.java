@@ -40,7 +40,8 @@ public class DataServlet extends HttpServlet {
     private final String txt = "text";
 
     /** Store each text input from the server as a Comment class, which has 
-        properties id, text, and timestamp. */
+      * properties id, text, and timestamp. 
+      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int limit = Integer.parseInt(request.getParameter("limit"));
