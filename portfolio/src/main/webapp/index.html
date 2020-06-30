@@ -1,50 +1,204 @@
 <!DOCTYPE html>
-
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <title>Carol's Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-
-  <body onload=loadComments()>
-    <div class="menu">
-      <ul>
-        <li class="logo"><a href="index.html"><img src="images/logo.jpg"></a></li>
-        <li class="currentLink"><a href="index.html">About Me</a></li>
-        <li><a href="background.html">Background</a></li>
-        <li><a href="photos.html">Photos</a></li>
-        <li><a href="contact.html">Contact Me</a></li>
-      </ul>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carol Sun</title>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+		<script src="main.js"></script>
+</head>
+<body>
+  <header>
+    <div class="menu-toggler">
+      <div class="bar half start"></div>
+			<div class="bar"></div>
+			<div class="bar half end"></div>
     </div>
+    <nav class="top-nav">
+      <ul class="nav-list">
+        <li>
+          <a href="index.html" class="nav-link">Home</a>
+        </li>
+        <li>
+          <a href="#about" class="nav-link">About</a>
+        </li>
+        <li>
+          <a href="#interests" class="nav-link">Interests</a>
+        </li>
+        <li>
+          <a href="#photos" class="nav-link">Photos</a>
+        </li>
+        <li>
+          <a href="#experience" class="nav-link">Experience</a>
+        </li>
+        <li>
+          <a href="#contact" class="nav-link">Contact</a>
+        </li>
+      </ul>
+    </nav>
 
-    <div class="banner">
-      <h1>About Me</h1>
-      <p>Hi! I'm Carol Sun! Here is a picture of me.</p>
-      <img src="images/Profile Pic.jpg" alt="Me" height="300" class="center"/>
-      <p>
-        I am currently a STEP intern and a rising junior at Caltech. 
-        I live in the Los Angeles area and I like to cook and garden in my free time! 
-      </p>
-      <p>Click here to get a random fact!:</p>
-      <div class="button_wrapper">
-        <button onclick="addRandomFact()" class="button">Fun Facts!</button> 
+    <div class="landing-text">
+        <p>Carol Sun</p>
+    </div>
+  </header>
+
+  <section class="about" id="about">
+    <div class="container">
+      <div class="profile-img" data-aos="fade-right" data-aos-delay="300">
+        <img src="images/square_profile.JPG" alt="Profile Pic">
       </div>
-      <br>
-      <div id="fact-container" class="center"></div>
+      <div class="about-details" data-aos="fade-left" data-aos-delay="600">
+        <div class="about-heading">
+          <h1>About</h1>
+          <h6>Myself</h6>
+        </div>
+        <p>
+          Hi! I'm Carol Sun! I am currently a STEP intern at Google and a rising junior at Caltech studying computer science. I'm a Los Angeles native or to be more specific, an actual valley girl. Explore my website to learn more about me!
+        </p>
+        <div class="social-media">
+          <ul class="nav-list">
+            <li>
+              <a href="http://www.github.com/carolksun" class="icon-link">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/carolkailesun" class="icon-link">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <h2>Comments Section</h2>
+  <section class="interests" id="interests">
+    <div class="container">
+      <div class="section-heading">
+          <h1>Interests</h1>
+          <h6>How I spend my time</h6>
+      </div>
+      <div class="my-skills">
+        <div class="skill" data-aos="fade-in" data-aos-delay="300">
+          <div class="icon-container">
+            <i class="fa fa-cutlery"></i>
+          </div>
+          <h1>Cooking</h1>
+          <p> 
+            I'm constantly trying new recipes, albeit mostly desserts. Some of my more successful dishes are pecan pie, egg tarts, cream puffs, macarons, and more recently, homemade sweet potato boba!
+          </p>
+        </div>
+        <div class="skill" data-aos="fade-in" data-aos-delay="600">
+          <div class="icon-container">
+            <i class="fa fa-lemon-o"></i>
+          </div>
+          <h1>Gardening</h1>
+          <p> 
+            I am mother to numerous plants, raising them from seedlings. I tend to kumquat, grapefruit,  and Mexican lime trees as well as tomato, serrano pepper, Japanese eggplant, Thai basil, and mint plants.
+          </p>
+        </div>
+        <div class="skill" data-aos="fade-in" data-aos-delay="900">
+          <div class="icon-container">
+            <i class="fa fa-camera"></i>
+          </div>
+          <h1>Photography</h1>
+          <p> 
+            I've recently gotten into photography with my Nikon D3400. My favorite scenes to photograph are landscapes, urban or rural. I've been practicing by taking it on hikes and trying my hand at food styling!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="photos" id="photos">
+    <div class="container">
+      <div class="section-heading">
+        <h1>Photos</h1>
+        <h6>My graphic design work</h6>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-description" data-aos="fade-right" data-aos-delay="300">
+          <p> These are some of my graphic design pieces from my AP Studio Art portfolio from my senior year of high school. 
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-horizonal has-margin-right" data-aos="fade-right" data-aos-delay="300">
+          <img src="images/ocean_triangle.jpg" alt="Ocean">
+        </div>
+        <div class="portfolio-vertical" data-aos="fade-left" data-aos-delay="600">
+          <img src="images/complementary_flowers.jpg" alt="Flowers">
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-vertical has-margin-right" data-aos="fade-right" data-aos-delay="600">
+          <img src="images/tall_trees.jpg" alt="Tall Trees">
+        </div>
+        <div class="portfolio-horizonal" data-aos="fade-left" data-aos-delay="300">
+          <img src="images/waterfall.jpg" alt="Waterfall">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="experience" id="experience">
+    <div class="container">
+      <div class="section-heading">
+        <h1>Work Experience</h1>
+        <h6>Past and current internships</h6>
+      </div>
+      <div class="timeline" data-aos="fade-down" data-aos-delay="300">
+        <ul>
+          <li class="date" data-date="Summer 2020">
+            <h1>Google</h1>
+            <p>
+              I am currently a STEP intern at Google, learning how to develop a website and later, contributing to open source project.
+            </p>
+          </li>
+          <li class="date" data-date="Summer 2019">
+            <h1>OpenX</h1>
+            <p>
+              Last summer, I worked on the data science team at OpenX, an ad tech company, developing a machine learning model to predict the profitability of an ad request. I used Tensorflow and Google Cloud Platform to create a boosted tree model that could save the company 10% of its costs. This project is now working in production!
+            </p>
+          </li>
+          <li class="date" data-date="Summer 2017, 2018">
+            <h1>National Institues of Health</h1>
+            <p>
+              As part of the Summer Internship Program at the National Institutes of Health, I used patient genotyping data to adjust protein expression to increase the performance of a Multiple Sclerosis diagonistic test. I also applied this method to improve the performance of a model that predicts the progression of the disease in patients.
+            </p>
+            <a href="https://www.ninds.nih.gov/Funding/Training-Career-Awards/Summer-Internships/sun_carol" class="cta">View Abstract</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-heading">
+        <h1>Comments</h1>
+        <h6>Let's chat!</h6>
+      </div>
       <form method="POST" action="/data">
-	<textarea rows="4" cols="50" name="text" placeholder="Leave a comment!"></textarea>
+        <textarea rows="4" cols="50" name="text" placeholder="Leave a comment!"></textarea>
         <br>
         <button>Submit</button>
       </form>
       <p>
-        # of Comments Shown: 
-        <input type="number" id="comment-choice" min="1" value="3" onchange=loadComments()> 
-      </p>
-      <div id="comments-container" class="center"></div>
+        # of Comments Shown:
+        <input type="number" id="comment-choice" min="1" value="3" onchange=loadComments()>
+                  </p>
+        <div id="comments-container" class="center"></div>
     </div>
-  </body>
+  </section>
+  <footer class="footer">
+    <div class="up" id="up">
+      <i class="fa fa-chevron-up"></i>
+    </div>
+  </footer>
+</body>
 </html>
