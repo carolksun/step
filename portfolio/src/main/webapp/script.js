@@ -50,6 +50,7 @@ function loadComments() {
 /**
  * Create comment on the page with a delete button. After a comment is deleted, 
  * the comments are reloaded with the correct number of comments shown.
+ * 
  * This functions creates HTML element that has the format:
  *
  *    <li class="comment">

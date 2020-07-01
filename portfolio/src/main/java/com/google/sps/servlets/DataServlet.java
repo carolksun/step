@@ -70,7 +70,11 @@ public class DataServlet extends HttpServlet {
         response.getWriter().println(gson.toJson(comments));
     }
 
-
+    /** 
+     * Stores the comment into datastore and redirect user back to home page 
+     * after submission. datastore.put() directs to /data page so the redirect
+     * prevents the user from reaching the /data page.
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String text = request.getParameter(Constants.TEXT_PROPERTY);
