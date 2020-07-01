@@ -21,11 +21,13 @@
 
     <div class="banner">
       <h1>About Me</h1>
-      <p>Hi! I'm Carol Sun! Here is a picture of me. 
+      <p>Hi! I'm Carol Sun! Here is a picture of me.</p>
       <img src="images/Profile Pic.jpg" alt="Me" height="300" class="center"/>
-      <p>I am currently a STEP intern and a rising junior at Caltech. 
+      <p>
+        I am currently a STEP intern and a rising junior at Caltech. 
         I live in the Los Angeles area and I like to cook and garden in my free time! 
-      <p>Click here to get a random fact!: 
+	    </p>
+      <p>Click here to get a random fact!:</p>
       <div class="button_wrapper">
         <button onclick="addRandomFact()" class="button">Fun Facts!</button> 
       </div>
@@ -34,13 +36,14 @@
 
       <h2>Comments Section</h2>
       <form method="POST" action="/data">
-		<textarea rows="4" cols="50" name="text">Leave a comment!</textarea>
+		    <textarea rows="4" cols="50" name="text" placeholder="Leave a comment!"></textarea>
         <br>
         <button>Submit</button>
       </form>
       <p>
         # of Comments Shown: 
         <input type="number" id="comment-choice" min="1" value="5" onchange=loadComments()> 
+	    </p>
       <div id="comments-container" class="center"></div>
     </div>
   </body>
