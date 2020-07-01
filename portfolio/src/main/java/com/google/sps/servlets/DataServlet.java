@@ -14,7 +14,7 @@
 
 package com.google.sps.servlets;
 import com.google.sps.data.Comment;
-import static com.google.sps.data.StringConstants.*;
+import com.google.sps.data.Constants;
 import com.google.gson.Gson;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -43,8 +43,8 @@ public class DataServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int limit = Integer.parseInt(request.getParameter(LIMIT_PROPERTY));
-        Query query = new Query(COMMENT_KIND).addSort(TIMESTAMP_PROPERTY, SortDirection.DESCENDING);
+        int limit = Integer.parseInt(request.getParameter(Constants.LIMIT_PROPERTY));
+        Query query = new Query(Constants.COMMENT_KIND).addSort(Constants.TIMESTAMP_PROPERTY, SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
@@ -57,8 +57,8 @@ public class DataServlet extends HttpServlet {
             } 
             i++;
             long id = entity.getKey().getId();
-            String text = (String)entity.getProperty(TEXT_PROPERTY);
-            long timestamp = (long)entity.getProperty(TIMESTAMP_PROPERTY);
+            String text = (String)entity.getProperty(Constants.TEXT_PROPERTY);
+            long timestamp = (long)entity.getProperty(Constants.TIMESTAMP_PROPERTY);
 
             Comment comment = new Comment(id, text, timestamp);
             comments.add(comment);
@@ -73,12 +73,12 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String text = request.getParameter(TEXT_PROPERTY);
+        String text = request.getParameter(Constants.TEXT_PROPERTY);
         long timestamp = System.currentTimeMillis();
 
-        Entity commentEntity = new Entity(COMMENT_KIND);
-        commentEntity.setProperty(TEXT_PROPERTY, text);
-        commentEntity.setProperty(TIMESTAMP_PROPERTY, timestamp);
+        Entity commentEntity = new Entity(Constants.COMMENT_KIND);
+        commentEntity.setProperty(Constants.TEXT_PROPERTY, text);
+        commentEntity.setProperty(Constants.TIMESTAMP_PROPERTY, timestamp);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);

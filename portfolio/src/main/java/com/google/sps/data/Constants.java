@@ -1,6 +1,6 @@
 package com.google.sps.data;
 
-public final class StringConstants {
+public final class Constants {
     public static final String COMMENT_KIND = "Comment";
     public static final String TIMESTAMP_PROPERTY = "timestamp";
     public static final String TEXT_PROPERTY = "text";

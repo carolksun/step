@@ -14,7 +14,7 @@
 
 package com.google.sps.servlets;
 import com.google.gson.Gson;
-import static com.google.sps.data.StringConstants.*;
+import com.google.sps.data.Constants;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -35,8 +35,8 @@ public class DeleteDataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        long id = Long.parseLong(request.getParameter(ID_PROPERTY));
-        Key commentEntityKey = KeyFactory.createKey(COMMENT_KIND, id);
+        long id = Long.parseLong(request.getParameter(Constants.ID_PROPERTY));
+        Key commentEntityKey = KeyFactory.createKey(Constants.COMMENT_KIND, id);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.delete(commentEntityKey);
     }
