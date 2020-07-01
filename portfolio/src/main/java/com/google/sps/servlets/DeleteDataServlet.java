@@ -27,14 +27,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;  
 
-/** Servlet that deletes the entity that has the corresponding id. */
+/** Servlet that deletes the entity that has the corresponding ID. */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
+    private final String COMMENT_KIND = "Comment";
+    private final String ID_PROPERTY = "id";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        long id = Long.parseLong(request.getParameter("id"));
-        Key commentEntityKey = KeyFactory.createKey("Comment", id);
+        long id = Long.parseLong(request.getParameter(ID_PROPERTY));
+        Key commentEntityKey = KeyFactory.createKey(COMMENT_KIND, id);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.delete(commentEntityKey);
     }
