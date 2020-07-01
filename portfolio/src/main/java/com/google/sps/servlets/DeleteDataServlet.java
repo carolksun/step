@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 import com.google.gson.Gson;
+import static com.google.sps.data.StringConstants.*;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -25,13 +26,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;  
+import java.util.ArrayList;
+import java.util.List; 
 
 /** Servlet that deletes the entity that has the corresponding ID. */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
-    private final String COMMENT_KIND = "Comment";
-    private final String ID_PROPERTY = "id";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

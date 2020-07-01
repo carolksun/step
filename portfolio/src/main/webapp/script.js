@@ -15,7 +15,7 @@
 /** Displays a random fact to the page. */
 function addRandomFact() {
     // List of facts to choose from.
-    const facts =[
+    const facts = [
         "I've lived in LA my whole life", 
         "I have surpassed level 3000 on Candy Crush Saga", 
         "I have an older sister", 
@@ -51,10 +51,11 @@ function loadComments() {
  * Create comment on the page with a delete button. After a comment is deleted, 
  * the comments are reloaded with the correct number of comments shown.
  * This functions creates HTML element that has the format:
- * <li class="comment">
- *   <span>COMMENT_TEXT</span>
- *   <button>Delete</button>
- * </li>
+ *
+ *    <li class="comment">
+ *      <span>COMMENT_TEXT</span>
+ *      <button>Delete</button>
+ *    </li>
  */
 function createCommentElement(comment) {
     const commentElement = document.createElement('li');

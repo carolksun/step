@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 import com.google.sps.data.Comment;
+import static com.google.sps.data.StringConstants.*;
 import com.google.gson.Gson;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -35,9 +36,6 @@ import java.util.List;
 /** Servlet that handles comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    private final String COMMENT_KIND = "Comment";
-    private final String TIMESTAMP_PROPERTY = "timestamp";
-    private final String TEXT_PROPERTY = "text";
 
     /** 
      * Retrieves the (limit number) of most recent comments from Datastore
@@ -45,7 +43,7 @@ public class DataServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int limit = Integer.parseInt(request.getParameter("limit"));
+        int limit = Integer.parseInt(request.getParameter(LIMIT_PROPERTY));
         Query query = new Query(COMMENT_KIND).addSort(TIMESTAMP_PROPERTY, SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
