@@ -31,7 +31,7 @@ function addRandomFact() {
 }
 
 /**
- * Load a specified number of comments to the comments section
+ * Load a specified number of comments to the comments section.
  * If the specified number is greater than the total number of comments, all
  * comments are shown.
  */
@@ -50,7 +50,7 @@ function loadComments() {
 }
 
 /**
- * Create comment on the page with a delete button
+ * Create comment on the page with a delete button.
  * After a comment is deleted, the comments are reloaded with the correct 
  * number of comments shown.
  */
