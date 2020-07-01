@@ -69,7 +69,7 @@ function createCommentElement(comment) {
     deleteButtonElement.addEventListener('click', () => {
         deleteComment(comment);
         commentElement.remove();
-        fetch("/data?limit=0").then(loadComments()) ;
+        fetch("/data?limit=10").then(loadComments()) ;
     });
 
     commentElement.appendChild(textElement);
