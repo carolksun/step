@@ -35,13 +35,14 @@ import java.util.List;
 /** Servlet that handles comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    private final String com = "Comment";
-    private final String ts = "timestamp";
-    private final String txt = "text";
+    private final String COMMENT_KIND = "Comment";
+    private final String TIMESTAMP_PROPERTY = "timestamp";
+    private final String TEXT_PROPERTY = "text";
 
-    /** Store each text input from the server as a Comment class, which has 
-      * properties id, text, and timestamp. 
-      */
+    /** 
+     * Retrieves the (limit number) of most recent comments from Datastore
+     * and produces a JSON response containing these comments
+     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int limit = Integer.parseInt(request.getParameter("limit"));
@@ -58,8 +59,8 @@ public class DataServlet extends HttpServlet {
             } 
             i++;
             long id = entity.getKey().getId();
-            String text = (String)entity.getProperty(txt);
-            long timestamp = (long)entity.getProperty(ts);
+            String text = (String)entity.getProperty(TEXT_PROPERTY);
+            long timestamp = (long)entity.getProperty(TIMESTAMP_PROPERTY);
 
             Comment comment = new Comment(id, text, timestamp);
             comments.add(comment);
@@ -74,12 +75,12 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String text = request.getParameter(txt);
+        String text = request.getParameter(TEXT_PROPERTY);
         long timestamp = System.currentTimeMillis();
 
-        Entity commentEntity = new Entity(com);
-        commentEntity.setProperty(txt, text);
-        commentEntity.setProperty(ts, timestamp);
+        Entity commentEntity = new Entity(COMMENT_KIND);
+        commentEntity.setProperty(TEXT_PROPERTY, text);
+        commentEntity.setProperty(TIMESTAMP_PROPERTY, timestamp);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
