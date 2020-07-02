@@ -33,13 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/** Servlet that handles comments data */
+/** Servlet that handles the comments data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
     /** 
      * Retrieves the (limit number) of most recent comments from Datastore
-     * and produces a JSON response containing these comments
+     * and produces a JSON response containing these comments.
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -71,9 +71,9 @@ public class DataServlet extends HttpServlet {
     }
 
     /** 
-     * Stores the comment into datastore and redirect user back to home page 
-     * after submission. datastore.put() directs to /data page so the redirect
-     * prevents the user from reaching the /data page.
+     * Stores the comment into Datastore and redirect user back to home page 
+     * after submission. The form to submit the comment on the website directs 
+     * to /data page so the redirect prevents the user from reaching the /data page.
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
