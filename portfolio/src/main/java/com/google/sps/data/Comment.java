@@ -14,7 +14,10 @@
 
 package com.google.sps.data;
 
-/** A comment that stores the id, text, and timestamp for use in Datastore*/
+/** 
+ * A comment is a container that stores data retrieved from Datastore (ID, text, 
+ * and timestamp) and returned to the user in JSON format. 
+ */
 public final class Comment {
   private final long id;
   private final String text;
