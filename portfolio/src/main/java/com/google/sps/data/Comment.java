@@ -15,8 +15,8 @@
 package com.google.sps.data;
 
 /** 
- * A Comment is a container that stores data retrieved from Datastore (ID, text, 
- * and timestamp) and returned to the user in JSON format. 
+ * A Comment is a container that stores data retrieved from Datastore and 
+ * returned to the user in JSON format. 
  */
 public final class Comment {
   private final long id;

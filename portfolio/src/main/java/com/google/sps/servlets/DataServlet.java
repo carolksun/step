@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/** Servlet that handles the comments data. */
+/** 
+ * Servlet that handles the comments data. 
+ */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
