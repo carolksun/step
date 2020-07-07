@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List; 
 
-/** Servlet that deletes the entity that has the corresponding ID. */
+/** 
+ * Servlet that deletes the entity that has the corresponding ID. 
+ */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
