@@ -33,7 +33,7 @@ html, body {
   margin-right:14px;
 }
 
-.currentLink {
+.currentLink a {
   color: white;
 }
 
@@ -43,6 +43,11 @@ h1 {
   font-size: 33px;
 }
 
+h2 { 
+  text-shadow: 1px 1px 1px #ccc;
+  text-align: center;
+  font-size: 25px;
+}
 
 p {
   text-align: center;
@@ -63,6 +68,10 @@ body {
 }
 
 #fact-container {
+  text-align: center;
+}
+
+#comments-container {
   text-align: center;
 }
 
@@ -91,4 +100,25 @@ body {
 .four-photos img {
   padding-left: 10px;
   padding-bottom: 8px;
+}
+
+form {
+  text-align: center;
+}
+
+#comments-container {
+  list-style-type: none;
+}
+
+.comment {
+  border: thin solid black;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 10px;
+  width: 300px;
+}
+
+.comment span {
+  flex-grow: 1;
 }

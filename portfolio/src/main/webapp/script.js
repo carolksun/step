@@ -12,20 +12,75 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
+/** Displays a random fact to the page. */
 function addRandomFact() {
-  const facts =
-      ["I\'ve lived in LA my whole life", 
-       "I have surpassed level 3000 on Candy Crush Saga", 
-       "I have an older sister", 
-       "My favorite fruit is watermelon"];
+    // List of facts to choose from.
+    const facts = [
+        "I've lived in LA my whole life", 
+        "I have surpassed level 3000 on Candy Crush Saga", 
+        "I have an older sister", 
+        "My favorite fruit is watermelon"
+    ];
 
-  // Pick a random fact.
-  const fact = facts[Math.floor(Math.random() * facts.length)];
+    const fact = facts[Math.floor(Math.random() * facts.length)];
 
-  // Add it to the page.
-  const factContainer = document.getElementById('fact-container');
-  factContainer.innerText = fact;
+    // Add it to the page.
+    const factContainer = document.getElementById('fact-container');
+    factContainer.innerText = fact;
+}
+
+/**
+ * Load a specified number of comments to the comments section. If the specified
+ * number is greater than the total number of comments, all comments are shown.
+ */
+function loadComments() {
+    var numCommentsShown = parseInt(document.getElementById('comment-choice').value);
+
+    fetch("/data?limit=".concat(numCommentsShown))
+    .then(response => response.json())
+    .then((messages) => {
+        const messageListElement = document.getElementById('comments-container');
+        messageListElement.innerHTML = "";
+        messages.forEach((comment) => {
+            messageListElement.appendChild(createCommentElement(comment));
+        });
+    });
+}
+
+/**
+ * Create comment on the page with a delete button. After a comment is deleted, 
+ * the comments are reloaded with the correct number of comments shown.
+ * 
+ * This functions creates HTML element that has the format:
+ *
+ *    <li class="comment">
+ *      <span>COMMENT_TEXT</span>
+ *      <button>Delete</button>
+ *    </li>
+ */
+function createCommentElement(comment) {
+    const commentElement = document.createElement('li');
+    commentElement.className = 'comment';
+
+    const textElement = document.createElement('span');
+    textElement.innerText = comment.text;
+
+    const deleteButtonElement = document.createElement('button');
+    deleteButtonElement.innerText = 'Delete';
+    deleteButtonElement.addEventListener('click', () => {
+        deleteComment(comment);
+        commentElement.remove();
+        fetch("/data?limit=10").then(loadComments()) ;
+    });
+
+    commentElement.appendChild(textElement);
+    commentElement.appendChild(deleteButtonElement);
+    return commentElement;
+}
+
+/** Tells the server to delete the comment. */
+function deleteComment(comment) {
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/delete-data', {method: 'POST', body: params});
 }
