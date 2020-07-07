@@ -1,6 +1,6 @@
 package com.google.sps.data;
 
-/*
+/**
  * Stores constants used repeatedly in the DataServlet and DeleteDataServlet.
  */
 public final class Constants {
