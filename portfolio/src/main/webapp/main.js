@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
  */
 function loadComments() {
     var numCommentsShown = parseInt(document.getElementById('comment-choice').value);
-    console.log(numCommentsShown);
+
     fetch("/data?limit=".concat(numCommentsShown))
     .then(response => response.json())
     .then((messages) => {
@@ -73,7 +73,10 @@ function createCommentElement(comment) {
     deleteButtonElement.addEventListener('click', () => {
         deleteComment(comment);
         commentElement.remove();
-        fetch("/data?limit=10").then(loadComments()) ;
+        setTimeout(function(){
+          fetch("/data?limit=10").then(loadComments()) ;
+        }, 100); 
+        
     });
 
     commentElement.appendChild(textElement);
@@ -81,7 +84,7 @@ function createCommentElement(comment) {
     return commentElement;
 }
 
-/** Tells the server to delete the comment. */
+/** Tells the server to delete the comment.*/
 function deleteComment(comment) {
     const params = new URLSearchParams();
     params.append('id', comment.id);
