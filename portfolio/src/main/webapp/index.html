@@ -49,12 +49,11 @@
   <section class="about" id="about">
     <div class="container">
       <div class="profile-img" data-aos="fade-right" data-aos-delay="300">
-        <img src="images/square_profile.JPG" alt="Profile Pic">
+        <img src="images/square_profile.jpg" alt="Profile Pic">
       </div>
       <div class="about-details" data-aos="fade-left" data-aos-delay="600">
         <div class="about-heading">
           <h1>About</h1>
-          <h6>Myself</h6>
         </div>
         <p>
           Hi! I'm Carol Sun! I am currently a STEP intern at Google and a rising junior at Caltech studying computer science. I'm a Los Angeles native or to be more specific, an actual valley girl. Explore my website to learn more about me!
@@ -81,7 +80,6 @@
     <div class="container">
       <div class="section-heading">
           <h1>Interests</h1>
-          <h6>How I spend my time</h6>
       </div>
       <div class="my-skills">
         <div class="skill" data-aos="fade-in" data-aos-delay="300">
@@ -119,7 +117,6 @@
     <div class="container">
       <div class="section-heading">
         <h1>Photos</h1>
-        <h6>My graphic design work</h6>
       </div>
       <div class="portfolio-item">
         <div class="portfolio-description" data-aos="fade-right" data-aos-delay="300">
@@ -149,7 +146,6 @@
     <div class="container">
       <div class="section-heading">
         <h1>Work Experience</h1>
-        <h6>Past and current internships</h6>
       </div>
       <div class="timeline" data-aos="fade-down" data-aos-delay="300">
         <ul>
@@ -181,18 +177,27 @@
     <div class="container">
       <div class="section-heading">
         <h1>Comments</h1>
-        <h6>Let's chat!</h6>
       </div>
-      <form method="POST" action="/data">
-        <textarea rows="4" cols="50" name="text" placeholder="Leave a comment!"></textarea>
-        <br>
-        <button>Submit</button>
-      </form>
-      <p>
-        # of Comments Shown:
-        <input type="number" id="comment-choice" min="1" value="3" onchange=loadComments()>
-                  </p>
-        <div id="comments-container" class="center"></div>
+      <div class="formComments">
+        <form method="POST" action="/data">
+          <textarea rows="4" cols="50" name="text" placeholder="Leave a comment!"></textarea>
+          <br>
+        <button id="submit-button">Submit</button>
+		    </form>
+      </div>    
+      <br>    
+      <div class="comments-dropdown">
+        <details>
+          <summary class="title">Show Comments
+          </summary>
+          # of Comments Shown: 
+          <input type="number" id="comment-choice" min="1" value="3" onchange=loadComments()>
+          <br>
+          <span class="comments-container">
+            <div id="comments-container" class="center"></div>
+          </span>
+        </details>
+      </div>
     </div>
   </section>
   <footer class="footer">
