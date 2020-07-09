@@ -33,6 +33,11 @@ public class SleepDataServlet extends HttpServlet {
 
   private LinkedHashMap<String, Double[]> sleepData = new LinkedHashMap<>();
 
+  /** 
+   * Reads in csv file and parses the data into the sleepData HashMap. Calls 
+   * the movingAverage function to add the moving average data as addition 
+   * elements in the array (value of the HashMap).
+   */
   @Override
   public void init() {
     Scanner scanner = new Scanner(getServletContext().getResourceAsStream(
@@ -52,6 +57,7 @@ public class SleepDataServlet extends HttpServlet {
     movingAverage();
   }
 
+  /** Produces a JSON response containing the sleepData HashMap. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
@@ -60,55 +66,64 @@ public class SleepDataServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  private void movingAverage() {
+  /** 
+   * Calculates 7-day moving average for a single data column and returns a list
+   * of the moving average data points.
+   */
+  private List<Double> singleMovingAverage(boolean score){
     int size = 7;
     int midway = size/2;
-    List<Double> sleepScore = new ArrayList<>();
-    List<Double> deepSleep = new ArrayList<>();
-
+    List<Double> origData = new ArrayList<>();
     Set<String> keys = sleepData.keySet();
     for(String date:keys){
         Double[] arr = sleepData.get(date);
-        sleepScore.add(arr[0]);
-        deepSleep.add(arr[1]);
-    }
-
-    List<Double> maSleepScore = new ArrayList<>(); 
-    List<Double> maDeepSleep = new ArrayList<>();    
-    int ssSum, dsSum;
-    double ssAverage, dsAverage;
-    for (int i = 0; i < sleepScore.size() ; i++){
-        ssSum = 0;
-        dsSum = 0;
-        ssAverage = 0;
-        dsAverage = 0;
-        if (i < midway) {
-           for (int j = 0; j < i + midway + 1; j++) {
-                ssSum += sleepScore.get(j);
-                dsSum += deepSleep.get(j);
-            }
-            ssAverage = ssSum / (i + midway + 1);
-            dsAverage = dsSum / (i + midway + 1); 
-        }
-        else if (i + midway + 1> sleepScore.size()){
-            for (int j = i - midway; j < sleepScore.size(); j++) {
-                ssSum += sleepScore.get(j);
-                dsSum += deepSleep.get(j);
-            }
-            ssAverage = ssSum / (sleepScore.size() - i + midway);
-            dsAverage = dsSum / (sleepScore.size() - i + midway); 
+        if (score){
+          origData.add(arr[0]);
         }
         else{
-            for (int j = i - midway; j < i + midway + 1; j++) {
-                ssSum += sleepScore.get(j);
-                dsSum += deepSleep.get(j);
-            }
-            ssAverage = ssSum / size;
-            dsAverage = dsSum / size;
+          origData.add(arr[1]);
         }
-        maSleepScore.add(ssAverage);
-        maDeepSleep.add(dsAverage);
     }
+    List<Double> maList = new ArrayList<>(); 
+    int sum;
+    double average;
+    for (int i = 0; i < origData.size() ; i++){
+        sum = 0;
+        average = 0;
+        /** Handles the first few data points*/
+        if (i < midway) {
+           for (int j = 0; j < i + midway + 1; j++) {
+                sum += origData.get(j);
+            }
+            average = sum / (i + midway + 1);
+        }
+        /** Handles the last few data points*/
+        else if (i + midway + 1> origData.size()){
+            for (int j = i - midway; j < origData.size(); j++) {
+                sum += origData.get(j);
+            }
+            average = sum / (origData.size() - i + midway);
+        }
+        /** Handles the middle data points*/
+        else{
+            for (int j = i - midway; j < i + midway + 1; j++) {
+                sum += origData.get(j);
+            }
+            average = sum / size;
+        }
+        maList.add(average);
+    }
+    return maList;
+  }
+
+  /** 
+   * Combines the moving average data lists with the raw data lists to create a 
+   * new array to replace the values of the HashMap.
+   */
+  private void movingAverage() {
+    List<Double> maSleepScore = singleMovingAverage(true);
+    List<Double> maDeepSleep = singleMovingAverage(false);
+    Set<String> keys = sleepData.keySet();
     int counter = 0;
     for (String date: keys) {
         Double[] arr = sleepData.get(date);
@@ -119,5 +134,5 @@ public class SleepDataServlet extends HttpServlet {
         counter++;
         sleepData.put(date, data);
     }
-    }
+  }
 }

@@ -54,7 +54,7 @@ function loadComments() {
  * Create comment on the page with a delete button. After a comment is deleted, 
  * the comments are reloaded with the correct number of comments shown.
  * 
- * This functions creates HTML element that has the format:
+ * This function creates HTML element that has the format:
  *
  *    <li class="comment">
  *      <span>COMMENT_TEXT</span>
@@ -91,6 +91,7 @@ function deleteComment(comment) {
     fetch('/delete-data', {method: 'POST', body: params});
 }
 
+/** Load charts using callback functions */
 google.charts.load('current', 
     {packages:['corechart'], callback: 
         function() { 
@@ -99,6 +100,13 @@ google.charts.load('current',
         }
     });
 
+/**
+ * Creates line plot of raw data and corresponding 7-day moving average. To reduce
+ * code duplicity, the function is called for both the sleep score and the deep
+ * sleep minutes charts. The variable score is a boolean representing which chart
+ * is being plotted. Depending on the value of score, different data is loaded in
+ * and the corresponding chart elements are filled in.
+ */
 function drawChart(score){
   fetch('/sleep-data').then(response => response.json())
   .then((sleep) => {
@@ -114,6 +122,7 @@ function drawChart(score){
     data.addColumn({type:'string', role:'annotation'});
     data.addColumn({type:'string', role:'annotationText'}); 
 
+    /** Hard-coded specific dates to apply annotation text to certain portion of graph. */
     Object.keys(sleep).forEach((day) => {
       if (score){
         raw_score = sleep[day][0];
@@ -143,6 +152,7 @@ function drawChart(score){
       }
     });
 
+    /** Chart styling that applies to both charts */
     var commonOptions = {
         curveType: 'function',
         width: 600,
@@ -162,6 +172,7 @@ function drawChart(score){
     };
 
     if (score){
+      /** Chart styling that applies to only sleep score chart */
       var scoreOptions = {
         title: 'Sleep Quality',
         colors: ['#CBBAFF', '#4911FF'],
@@ -169,12 +180,14 @@ function drawChart(score){
             title: "Sleep Score",
         }
       }
+      /** Dictionaries of the options are merged to create overall chart styling */
       var options = Object.assign({}, commonOptions, scoreOptions);
       const chart = new google.visualization.LineChart(
         document.getElementById('score_div'));
       chart.draw(data, options);
     }
     else {
+      /** Chart styling that applies to only deep sleep minutes chart */
       var minOptions = {
         title: 'Deep Sleep Minutes',
         colors: ['#FFB2FB', '#FF00C4'],
@@ -191,8 +204,6 @@ function drawChart(score){
   });
 }
 
-
-/** Fetches sleep data and uses it to create a chart. */
 function drawScoreChart() {
   drawChart(true);
 }
