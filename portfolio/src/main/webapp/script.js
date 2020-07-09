@@ -10,7 +10,7 @@ $(document).ready(function () {
     $('.top-nav').removeClass('open');
   });
   
-  $('nav a[href*="#"]').on('click', function() {
+  $(`nav a[href*='#']`).on('click', function() {
     $('html, body').animate({
       scrollTop: $($(this).attr('href')).offset().top - 100
     }, 1000);
@@ -29,7 +29,7 @@ $(document).ready(function () {
   });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
   loadComments();
 });
 
@@ -40,11 +40,11 @@ document.addEventListener("DOMContentLoaded", function() {
 function loadComments() {
   var numCommentsShown = parseInt(document.getElementById('comment-choice').value);
 
-  fetch("/data?limit=".concat(numCommentsShown))
+  fetch('/data?limit='.concat(numCommentsShown))
   .then(response => response.json())
   .then((messages) => {
     const messageListElement = document.getElementById('comments-container');
-    messageListElement.innerHTML = "";
+    messageListElement.innerHTML = '';
     messages.forEach((comment) => {
       messageListElement.appendChild(createCommentElement(comment));
     });
@@ -75,7 +75,7 @@ function createCommentElement(comment) {
     deleteComment(comment);
     commentElement.remove();
     setTimeout(function() {
-      fetch("/data?limit=10").then(loadComments()) ;
+      fetch('/data?limit=10').then(loadComments());
     }, 100); 
   });
 
@@ -127,22 +127,22 @@ function drawChart(score){
       if (score) {
         rawScore = sleep[day][0];
         maScore = sleep[day][2];
-          if (day == "2020-05-30") {
+          if (day == '2020-05-30') {
             data.addRow([
               new Date(day),
               rawScore,
               maScore,
-              "Finals",
-              "Blame the algorithms final."
+              'Finals',
+              'Blame the algorithms final.'
             ]);
           }
-          else if (day == "2020-03-14") {
+          else if (day == '2020-03-14') {
             data.addRow([
               new Date(day),
               rawScore,
               maScore,
-              "Return Home",
-              "COVID cancelling classes means a good night's sleep."
+              'Return Home',
+              `COVID cancelling classes means a good night's sleep.`
             ]);
           }
           else {
@@ -158,22 +158,22 @@ function drawChart(score){
       else {
         rawMinutes = sleep[day][1];
         maMinutes = sleep[day][3];
-          if (day == "2020-01-12") {
+          if (day == '2020-01-12') {
             data.addRow([
               new Date(day),
               rawMinutes,
               maMinutes,
-              "Back to School",
-              "Goodbye winter break."
+              'Back to School',
+              'Goodbye winter break.'
             ]);
           }
-          else if (day == "2020-02-15") {
+          else if (day == '2020-02-15') {
             data.addRow([
               new Date(day),
               rawMinutes,
               maMinutes,
-              "Midterms",
-              "Tests. Again."
+              'Midterms',
+              'Tests. Again.'
             ]);
           }
           else {
@@ -196,7 +196,7 @@ function drawChart(score){
       hAxis: {
         format: 'MM/dd/yy',
         gridlines: {color: 'none'},
-        title: "Date"
+        title: 'Date'
       },
       legend: { 
         position: 'bottom' 
@@ -217,7 +217,7 @@ function drawChart(score){
         title: 'Sleep Quality',
         colors: ['#CBBAFF', '#4911FF'],
         vAxis: {
-          title: "Sleep Score",
+          title: 'Sleep Score',
         }
       }
       /** Dictionaries of the options are merged to create overall chart styling. */
@@ -232,7 +232,7 @@ function drawChart(score){
         title: 'Deep Sleep Minutes',
         colors: ['#FFB2FB', '#FF00C4'],
         vAxis: {
-          title: "Minutes",
+          title: 'Minutes',
           gridlines: {count: 15}
         },
       }
