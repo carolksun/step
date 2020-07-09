@@ -93,21 +93,21 @@ public class SleepDataServlet extends HttpServlet {
     for (int i = 0; i < origData.size() ; i++) {
       sum = 0;
       average = 0;
-      /** Handles the first few data points*/
+      /** Handles the first few data points. */
       if (i < midway) {
         for (int j = 0; j < i + midway + 1; j++) {
           sum += origData.get(j);
         }
         average = sum / (i + midway + 1);
       }
-      /** Handles the last few data points*/
+      /** Handles the last few data points. */
       else if (i + midway + 1> origData.size()){
         for (int j = i - midway; j < origData.size(); j++) {
           sum += origData.get(j);
         }
         average = sum / (origData.size() - i + midway);
       }
-      /** Handles the middle data points*/
+      /** Handles the middle data points. */
       else{
         for (int j = i - midway; j < i + midway + 1; j++) {
           sum += origData.get(j);

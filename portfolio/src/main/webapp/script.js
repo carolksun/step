@@ -91,7 +91,7 @@ function deleteComment(comment) {
   fetch('/delete-data', {method: 'POST', body: params});
 }
 
-/** Load charts using callback functions */
+/** Load charts using callback functions. */
 google.charts.load('current', 
   {packages:['corechart'], callback: 
     function() { 
@@ -188,7 +188,7 @@ function drawChart(score){
       }
     });
 
-    /** Chart styling that applies to both charts */
+    /** Chart styling that applies to both charts. */
     var commonOptions = {
       curveType: 'function',
       width: 600,
@@ -212,7 +212,7 @@ function drawChart(score){
     };
 
     if (score) {
-      /** Chart styling that applies to only sleep score chart */
+      /** Chart styling that applies to only sleep score chart. */
       var scoreOptions = {
         title: 'Sleep Quality',
         colors: ['#CBBAFF', '#4911FF'],
@@ -220,14 +220,14 @@ function drawChart(score){
           title: "Sleep Score",
         }
       }
-      /** Dictionaries of the options are merged to create overall chart styling */
+      /** Dictionaries of the options are merged to create overall chart styling. */
       var options = Object.assign({}, commonOptions, scoreOptions);
       const chart = new google.visualization.LineChart(
         document.getElementById('scoreDiv'));
       chart.draw(data, options);
     }
     else {
-      /** Chart styling that applies to only deep sleep minutes chart */
+      /** Chart styling that applies to only deep sleep minutes chart. */
       var minOptions = {
         title: 'Deep Sleep Minutes',
         colors: ['#FFB2FB', '#FF00C4'],
