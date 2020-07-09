@@ -48,6 +48,10 @@ public class SleepDataServlet extends HttpServlet {
         String line = scanner.nextLine();
         String[] cells = line.split(",");
 
+        /** 
+         * All timestamps in the file is of the form 2020-06-25T07:26:30Z so we
+         * can parse the date out of the timestamp by splitting at "T".
+         */
         String timestamp = cells[0];
         int tindex = timestamp.indexOf("T"); 
         String date_string = timestamp.substring(0 , tindex);

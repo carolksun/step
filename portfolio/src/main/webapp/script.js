@@ -102,7 +102,7 @@ google.charts.load('current',
 
 /**
  * Creates line plot of raw data and corresponding 7-day moving average. To reduce
- * code duplicity, the function is called for both the sleep score and the deep
+ * code duplication, the function is called for both the sleep score and the deep
  * sleep minutes charts. The variable "score" is a boolean representing which chart
  * is being plotted. Depending on the truth value of "score", different data is loaded
  * and the corresponding chart elements are filled.
