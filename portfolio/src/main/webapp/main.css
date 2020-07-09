@@ -390,7 +390,13 @@ li {
 }
 /*End timeline*/
 
-/*Start contact*/
+/*Start charts*/
+table {
+  border-spacing: 10px;
+}
+/*End charts*/
+
+/*Start comments*/
 .contact {
   background-color: #221e3f;
 }
@@ -482,7 +488,7 @@ details[open] summary ~ * {
   0%    {opacity: 0; margin-left: -10px}
   100%  {opacity: 0.5; margin-left: 0px}
 }
-/*End contact*/
+/*End comments*/
 
 /*Start footer*/
 .footer {

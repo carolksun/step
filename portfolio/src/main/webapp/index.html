@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="main.js"></script>
   </head>
   <body>
@@ -34,6 +35,9 @@
           </li>
           <li>
             <a href="#experience" class="nav-link">Experience</a>
+          </li>
+          <li>
+            <a href="#charts" class="nav-link">Charts</a>
           </li>
           <li>
             <a href="#comments" class="nav-link">Comments</a>
@@ -194,6 +198,24 @@
             </li>
           </ul>
         </div>
+      </div>
+    </section>
+
+    <section class="charts" id="charts">
+      <div class="container">
+        <div class="section-heading">
+          <h1>Charts</h1>
+        </div>
+        <table class="chartWithOverlay">
+          <tr>
+            <td>
+              <div id="score_div" data-aos="fade-right" data-aos-delay="300"</div>
+            </td>
+            <td>
+              <div id="min_div" data-aos="fade-left" data-aos-delay="300"></div>
+            </td>
+          </tr>
+        </table>
       </div>
     </section>
 

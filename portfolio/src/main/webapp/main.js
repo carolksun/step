@@ -90,3 +90,112 @@ function deleteComment(comment) {
     params.append('id', comment.id);
     fetch('/delete-data', {method: 'POST', body: params});
 }
+
+google.charts.load('current', 
+    {packages:['corechart'], callback: 
+        function() { 
+            drawScoreChart();
+            drawMinChart();
+        }
+    });
+
+/** Fetches sleep data and uses it to create a chart. */
+function drawScoreChart() {
+  fetch('/sleep-data').then(response => response.json())
+  .then((sleep) => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('date', 'Day');
+    data.addColumn('number', 'Sleep Score');
+    data.addColumn('number', 'Moving Average')
+    data.addColumn({type:'string', role:'annotation'});
+    data.addColumn({type:'string', role:'annotationText'});  
+    Object.keys(sleep).forEach((day) => {
+        if (day == "2020-05-30"){
+            data.addRow([new Date(day), sleep[day][0], sleep[day][2], "Finals", "Blame the algorithms final."]);
+        }
+        else if (day == "2020-03-14"){
+            data.addRow([new Date(day), sleep[day][0], sleep[day][2], "Return Home", "COVID cancelling classes means a good night's sleep."]);
+        }
+      else{
+          data.addRow([new Date(day), sleep[day][0], sleep[day][2], undefined, undefined]);
+      }
+    });
+
+    var options = {
+        title: 'Sleep Quality',
+        curveType: 'function',
+        width: 600,
+        height: 450,
+        colors: ['#CBBAFF', '#4911FF'],
+        vAxis: {
+            title: "Sleep Score",
+        },
+        hAxis: {
+            format: 'MM/dd/yy',
+            gridlines: {color: 'none'},
+            title: "Date"
+        },
+        legend: { position: 'bottom' },
+        chartArea: {'width': '85%', 'height': '70%'},
+        animation:{
+            startup: true,
+            duration: 1500,
+            easing: 'out'
+        }
+    };
+    const chart = new google.visualization.LineChart(
+        document.getElementById('score_div'));
+    chart.draw(data, options);
+  });
+}
+
+function drawMinChart() {
+  fetch('/sleep-data').then(response => response.json())
+  .then((sleep) => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('date', 'Day');
+    data.addColumn('number', 'Deep Sleep Minutes');
+    data.addColumn('number', 'Moving Average');
+    data.addColumn({type:'string', role:'annotation'});
+    data.addColumn({type:'string', role:'annotationText'});  
+    Object.keys(sleep).forEach((day) => {
+        if (day == "2020-01-12"){
+            data.addRow([new Date(day), sleep[day][1], sleep[day][3], "Back to School", "Goodbye winter break."]);
+        }
+        else if (day == "2020-02-15"){
+            data.addRow([new Date(day), sleep[day][1], sleep[day][3], "Midterms", "Tests. Again."]);
+        }
+        else{
+          data.addRow([new Date(day), sleep[day][1], sleep[day][3], undefined, undefined]);
+      }
+    });
+
+    var options = {
+        title: 'Deep Sleep Minutes',
+        curveType: 'function',
+        width: 600,
+        height: 450,
+        colors: ['#FFB2FB', '#FF00C4'],
+        vAxis: {
+            title: "Minutes",
+            gridlines: {count: 15}
+        },
+        hAxis: {
+            format: 'MM/dd/yy',
+            gridlines: {color: 'none'},
+            title: "Date"
+        },
+        legend: { position: 'bottom' },
+        chartArea: {'width': '80%', 'height': '70%'},
+        animation:{
+            startup: true,
+            duration: 1500,
+            easing: 'out'
+        }
+    };
+
+    const chart = new google.visualization.LineChart(
+        document.getElementById('min_div'));
+    chart.draw(data, options);
+  });
+}
