@@ -30,8 +30,11 @@ import java.util.Set;
 
 @WebServlet("/sleep-data")
 public class SleepDataServlet extends HttpServlet {
+  static final int SIZE = 5;
+  static final String FILENAME = "/WEB-INF/sleep_data.csv";
 
   private LinkedHashMap<String, Double[]> sleepData = new LinkedHashMap<>();
+  
 
   /** 
    * Reads in csv file and parses the data into the sleepData HashMap. Calls 
@@ -40,8 +43,7 @@ public class SleepDataServlet extends HttpServlet {
    */
   @Override
   public void init() {
-    Scanner scanner = new Scanner(getServletContext().getResourceAsStream(
-            "/WEB-INF/sleep_data.csv"));
+    Scanner scanner = new Scanner(getServletContext().getResourceAsStream(FILENAME));
     while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         String[] cells = line.split(",");
@@ -49,8 +51,10 @@ public class SleepDataServlet extends HttpServlet {
         String timestamp = cells[0];
         int tindex = timestamp.indexOf("T"); 
         String date_string = timestamp.substring(0 , tindex);
-        Double[] data = new Double[]{(double)Integer.parseInt(cells[1]),  
-                                    (double)Integer.parseInt(cells[3])}; 
+        Double[] data = new Double[]{
+                          (double)Integer.parseInt(cells[1]),  
+                          (double)Integer.parseInt(cells[3])
+                        }; 
         sleepData.put(date_string, data);
     }
     scanner.close();
@@ -70,48 +74,47 @@ public class SleepDataServlet extends HttpServlet {
    * Calculates 7-day moving average for a single data column and returns a list
    * of the moving average data points.
    */
-  private List<Double> singleMovingAverage(boolean score){
-    int size = 7;
-    int midway = size/2;
+  private List<Double> singleMovingAverage(boolean score) {
+    int midway = SIZE / 2;
     List<Double> origData = new ArrayList<>();
     Set<String> keys = sleepData.keySet();
     for(String date:keys){
-        Double[] arr = sleepData.get(date);
-        if (score){
-          origData.add(arr[0]);
-        }
-        else{
-          origData.add(arr[1]);
-        }
+      Double[] arr = sleepData.get(date);
+      if (score) {
+        origData.add(arr[0]);
+      }
+      else {
+        origData.add(arr[1]);
+      }
     }
     List<Double> maList = new ArrayList<>(); 
     int sum;
     double average;
-    for (int i = 0; i < origData.size() ; i++){
-        sum = 0;
-        average = 0;
-        /** Handles the first few data points*/
-        if (i < midway) {
-           for (int j = 0; j < i + midway + 1; j++) {
-                sum += origData.get(j);
-            }
-            average = sum / (i + midway + 1);
+    for (int i = 0; i < origData.size() ; i++) {
+      sum = 0;
+      average = 0;
+      /** Handles the first few data points*/
+      if (i < midway) {
+        for (int j = 0; j < i + midway + 1; j++) {
+          sum += origData.get(j);
         }
-        /** Handles the last few data points*/
-        else if (i + midway + 1> origData.size()){
-            for (int j = i - midway; j < origData.size(); j++) {
-                sum += origData.get(j);
-            }
-            average = sum / (origData.size() - i + midway);
+        average = sum / (i + midway + 1);
+      }
+      /** Handles the last few data points*/
+      else if (i + midway + 1> origData.size()){
+        for (int j = i - midway; j < origData.size(); j++) {
+          sum += origData.get(j);
         }
-        /** Handles the middle data points*/
-        else{
-            for (int j = i - midway; j < i + midway + 1; j++) {
-                sum += origData.get(j);
-            }
-            average = sum / size;
+        average = sum / (origData.size() - i + midway);
+      }
+      /** Handles the middle data points*/
+      else{
+        for (int j = i - midway; j < i + midway + 1; j++) {
+          sum += origData.get(j);
         }
-        maList.add(average);
+        average = sum / SIZE;
+      }
+      maList.add(average);
     }
     return maList;
   }
@@ -126,13 +129,15 @@ public class SleepDataServlet extends HttpServlet {
     Set<String> keys = sleepData.keySet();
     int counter = 0;
     for (String date: keys) {
-        Double[] arr = sleepData.get(date);
-        Double[] data = new Double[]{arr[0],  
-                            arr[1],
-                            maSleepScore.get(counter),
-                            maDeepSleep.get(counter)};
-        counter++;
-        sleepData.put(date, data);
+      Double[] arr = sleepData.get(date);
+      Double[] data = new Double[]{
+                        arr[0],  
+                        arr[1],
+                        maSleepScore.get(counter),
+                        maDeepSleep.get(counter)
+                      };
+      counter++;
+      sleepData.put(date, data);
     }
   }
 }
