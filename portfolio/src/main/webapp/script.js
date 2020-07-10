@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
  * number is greater than the total number of comments, all comments are shown.
  */
 function loadComments() {
-  var numCommentsShown = parseInt(document.getElementById('comment-choice').value);
+  let numCommentsShown = parseInt(document.getElementById('comment-choice').value);
 
   fetch('/data?limit='.concat(numCommentsShown))
   .then(response => response.json())
@@ -108,7 +108,7 @@ google.charts.load('current',
  * is being plotted. Depending on the truth value of "score", different data is loaded
  * and the corresponding chart elements are filled.
  */
-function drawChart(score){
+function drawChart(score) {
   fetch('/sleep-data').then(response => response.json())
   .then((sleep) => {
     const data = new google.visualization.DataTable();
@@ -190,7 +190,7 @@ function drawChart(score){
     });
 
     /** Chart styling that applies to both charts. */
-    var commonOptions = {
+    let commonOptions = {
       curveType: 'function',
       width: 600,
       height: 450,
@@ -214,7 +214,7 @@ function drawChart(score){
 
     if (score) {
       /** Chart styling that applies to only sleep score chart. */
-      var scoreOptions = {
+      let scoreOptions = {
         title: 'Sleep Quality',
         colors: ['#CBBAFF', '#4911FF'],
         vAxis: {
@@ -222,14 +222,14 @@ function drawChart(score){
         }
       }
       /** Dictionaries of the options are merged to create overall chart styling. */
-      var options = Object.assign({}, commonOptions, scoreOptions);
+      let options = Object.assign({}, commonOptions, scoreOptions);
       const chart = new google.visualization.LineChart(
         document.getElementById('scoreDiv'));
       chart.draw(data, options);
     }
     else {
       /** Chart styling that applies to only deep sleep minutes chart. */
-      var minOptions = {
+      let minOptions = {
         title: 'Deep Sleep Minutes',
         colors: ['#FFB2FB', '#FF00C4'],
         vAxis: {
@@ -237,7 +237,7 @@ function drawChart(score){
           gridlines: {count: 15}
         },
       }
-      var options = Object.assign({}, commonOptions, minOptions);
+      let options = Object.assign({}, commonOptions, minOptions);
       const chart = new google.visualization.LineChart(
         document.getElementById('minDiv'));
       chart.draw(data, options);
@@ -253,21 +253,24 @@ function drawMinChart() {
   drawChart(false);
 }
 
-var markers = [];
-var map;
-
+/*
+ * Load Google Maps at a world zoom level and adds markers to all 
+ * latitude/longitude locations.
+ */
 function createMap() {
-  map = new google.maps.Map(document.getElementById('map-div'), {
+  const markers = [];
+  const map = new google.maps.Map(document.getElementById('map-div'), {
     zoom: 1.8,
     center: {lat: 30, lng: 0}
   });
 
-  for (var i = 0; i < locations.length; i++) {
-    addMarkerWithTimeout(locations[i], i * 200);
+  for (let i = 0; i < locations.length; i++) {
+    addMarkerWithTimeout(locations[i], i * 200, map, markers);
   }
 }
 
-function addMarkerWithTimeout(position, timeout) {
+/** Places a marker at the position on the map with a drop animation. */
+function addMarkerWithTimeout(position, timeout, map, markers) {
   window.setTimeout(function() {
     markers.push(new google.maps.Marker({
       position: new google.maps.LatLng(position[1], position[2]),

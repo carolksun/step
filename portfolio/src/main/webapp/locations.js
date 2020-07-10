@@ -1,4 +1,4 @@
-var locations = [
+const locations = [
   ['Los Angeles', 34.052235, -118.243683], 
   ['San Francisco', 37.774929, -122.419418],
   ['Seattle', 47.606209, -122.332069],

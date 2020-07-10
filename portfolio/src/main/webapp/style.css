@@ -13,7 +13,7 @@
   font-style: normal;
 }
 
-/*Start global*/
+/* Start global */
 * {
   margin: 0;
   padding: 0;
@@ -50,9 +50,9 @@ p {
 img {
   width: 100%;
 }
-/*End global*/
+/* End global */
 
-/*Start reusable*/
+/* Start reusable */
 .container {
   width: 90%;
   max-width: 120rem;
@@ -76,9 +76,9 @@ img {
 .has-margin-right {
   margin-right: 2rem;
 }
-/*End reusable*/
+/* End reusable */
 
-/*Start header*/
+/* Start header */
 header {
   width: 100%;
   height: 100vh;
@@ -195,9 +195,9 @@ li {
   padding: 1rem;
   user-select: none;
 }
-/*End header*/
+/* End header */
 
-/*Start about*/
+/* Start about */
 .about .container {
   display: flex;
   align-items: center;
@@ -246,9 +246,9 @@ li {
 .fa-linkedin-square:hover {
   color: #0072b1;
 }
-/*End about*/
+/* End about */
 
-/*Start interests*/
+/* Start interests */
 .my-skills {
   margin-top: 10rem;
   display: grid;
@@ -288,9 +288,9 @@ li {
   margin: auto;
   transform: rotate(-45deg);
 }
-/*End interests*/
+/* End interests */
 
-/*Start portfolio*/
+/* Start portfolio */
 .portfolio-item {
   display: flex;
   align-items: center;
@@ -308,9 +308,9 @@ li {
   width: auto;
   height: auto;
 }
-/*End portfolio*/
+/* End portfolio */
 
-/*Start timeline*/
+/* Start timeline */
 .timeline ul {
   border-left: 4px solid rgb(238, 122, 122);
   border-radius: .8rem;
@@ -386,24 +386,24 @@ li {
 .timeline .cta:hover {
   color: #4dc984;
 }
-/*End timeline*/
+/* End timeline */
 
-/*Start charts*/
+/* Start charts */
 table {
   border-spacing: 10px;
 }
-/*End charts*/
+/* End charts */
 
-/*Start map*/
+/* Start map */
 #map-div {
   border: none;
   margin: 0 auto 0 auto;
   width: 80%;
   height: 60rem;
 }
-/*End map*/
+/* End map */
 
-/*Start comments*/
+/* Start comments */
 .contact {
   background-color: #221e3f;
 }
@@ -489,9 +489,9 @@ details span {
 details[open] summary ~ * {
   animation: sweep 1s ease-in-out;
 }
-/*End comments*/
+/* End comments */
 
-/*Start footer*/
+/* Start footer */
 .footer {
   width: 100%;
   text-align: center;
@@ -522,9 +522,9 @@ details[open] summary ~ * {
 .copyright p {
   font-size: 1.3rem;
 }
-/*End footer*/
+/* End footer */
 
-/*Start animations*/
+/* Start animations */
 @keyframes sweep {
   0%    {opacity: 0; margin-left: -10px}
   100%  {opacity: 0.5; margin-left: 0px}
@@ -541,4 +541,4 @@ details[open] summary ~ * {
     box-shadow: 0 0 0 0 rgba(253, 87, 191, 0);
   }
 }
-/*End animations*/
+/* End animations */
