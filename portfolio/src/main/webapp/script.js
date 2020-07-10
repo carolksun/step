@@ -254,8 +254,9 @@ function drawMinChart() {
 }
 
 /*
- * Load Google Maps at a world zoom level and adds markers to all 
- * latitude/longitude locations.
+ * Loads Google Maps at a world zoom level and adds markers to all 
+ * latitude/longitude locations. The markers are dropped one by one using a 
+ * timeout to make the pins appear individually.
  */
 function createMap() {
   const markers = [];
