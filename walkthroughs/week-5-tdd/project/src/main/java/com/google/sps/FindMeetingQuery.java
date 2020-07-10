@@ -62,12 +62,12 @@ public final class FindMeetingQuery {
 
     List<TimeRange> possibleTimes = new ArrayList<>();
 
-    // duration of meeting is wrong then no meeting times
+    // if the duration of meeting is invalid, then there are no meeting times.
     if (duration > TimeRange.getTimeInMinutes(23, 59) || duration < 0){
         return possibleTimes;
     }
     
-    // if no events for the day
+    // if there are no events for the day, then the meeting can be any time.
     if (events.size() == 0){
         possibleTimes.add(TimeRange.WHOLE_DAY);
         return possibleTimes;
@@ -75,7 +75,7 @@ public final class FindMeetingQuery {
     
     // intersection - O(n)
     // For loop rutime - O(n^2)
-    if (optional.size() > 0){
+    if (optional.size() > 0) {
       List<String> allAttendees = new ArrayList<>(attendees);
       allAttendees.addAll(optional);
       MeetingRequest new_request = new MeetingRequest(allAttendees, duration);
@@ -86,11 +86,82 @@ public final class FindMeetingQuery {
       else if (attendees.size() == 0) {
         return possibleTimes;
       }
+      else if (optional.size() > 1) {
+        Collection<TimeRange> availableTimesMand = intervalFinder(events_list, request, possibleTimes);
+        List<TimeRange> bestTimes = new ArrayList<>();
+        int minOverlaps = Integer.MAX_VALUE;
+        Collection<String> optionalAt = request.getOptionalAttendees();
+        ArrayList<Event> onlyOptionalEvents = new ArrayList<>();
+        for (Event e : events_list){
+          Collection<String> eventAttendees = e.getAttendees();
+          Collection<String> optionalEventAttendees = new HashSet<>(eventAttendees);
+          optionalEventAttendees.retainAll(optionalAt);
+          if (optionalEventAttendees.size() > 0) {
+            onlyOptionalEvents.add(e);
+          }
+        }
+
+        List<TimeRange> contained = new ArrayList<>();
+        for (TimeRange range : availableTimesMand) {
+          for (Event e : onlyOptionalEvents){
+            if (e.getWhen().overlaps(range)) {
+              if (range.start() <= e.getWhen().start()) {
+                TimeRange begin = TimeRange.fromStartEnd(range.start(), e.getWhen().start(), false);
+                if (begin.duration() >= duration){
+                  contained.add(begin);
+                }
+              }
+              if (range.end() >= e.getWhen().end()) {
+                TimeRange end = TimeRange.fromStartEnd(e.getWhen().end(), range.end(), false);
+                if (end.duration() >= duration){
+                  contained.add(end);
+                }
+              }
+            }
+          }
+        }
+        System.out.println(contained);     
+        if (contained.size() > 0){
+          for (TimeRange c : contained) {
+            int counterOverlaps = 0;
+            for (TimeRange range : availableTimesMand){
+              if (c.overlaps(range)) {
+                counterOverlaps += 1;
+              }
+            }
+            if (counterOverlaps < minOverlaps){
+              bestTimes.clear();
+              minOverlaps = counterOverlaps;
+              bestTimes.add(c);
+            }
+            else if (counterOverlaps == minOverlaps){
+              bestTimes.add(c);
+            }
+          }
+          return bestTimes;
+        }
+        else {
+          for (TimeRange range : availableTimesMand) {
+            int counterOverlaps = 0;
+            for (Event e : onlyOptionalEvents){
+              if (e.getWhen().overlaps(range)) {
+                counterOverlaps += 1;
+              }
+            }
+            if (counterOverlaps < minOverlaps){
+              bestTimes.clear();
+              minOverlaps = counterOverlaps;
+              bestTimes.add(range);
+            }
+            else if (counterOverlaps == minOverlaps){
+              bestTimes.add(range);
+            }
+          }
+          return bestTimes;
+        }
+        
+      }
     }
     return intervalFinder(events_list, request, possibleTimes);
   }
 }
-
-/* Determine what time period has the least overlaps for optional attendees.
-   If only a time periond only has one optional attendee that can't make it,
-   then kick them out.*/
