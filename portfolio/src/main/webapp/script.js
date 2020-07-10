@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   loadComments();
 });
 
+
 /**
  * Load a specified number of comments to the comments section. If the specified
  * number is greater than the total number of comments, all comments are shown.
@@ -256,26 +257,23 @@ var markers = [];
 var map;
 
 function createMap() {
-    console.log(locations);
-    
-    map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 1.55,
-        center: {lat: 30, lng: 0}
-    });
+  map = new google.maps.Map(document.getElementById('map-div'), {
+    zoom: 1.8,
+    center: {lat: 30, lng: 0}
+  });
 
-    for (var i = 0; i < locations.length; i++) {
-        addMarkerWithTimeout(locations[i], i * 200);
-    }
+  for (var i = 0; i < locations.length; i++) {
+    addMarkerWithTimeout(locations[i], i * 200);
+  }
 }
 
 function addMarkerWithTimeout(position, timeout) {
-        window.setTimeout(function() {
-          markers.push(new google.maps.Marker({
-            position: new google.maps.LatLng(position[1], position[2]),
-            map: map,
-            animation: google.maps.Animation.DROP,
-            title: position[0]
-          }));
-        }, timeout);
-      }
-
+  window.setTimeout(function() {
+    markers.push(new google.maps.Marker({
+      position: new google.maps.LatLng(position[1], position[2]),
+      map: map,
+      animation: google.maps.Animation.DROP,
+      title: position[0]
+    }));
+  }, timeout);
+}

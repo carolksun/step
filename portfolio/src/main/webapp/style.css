@@ -44,6 +44,7 @@ a {
 p {
   font-size: 1.8rem;
   font-weight: 300;
+  text-align: center;
 }
 
 img {
@@ -330,6 +331,10 @@ li {
   opacity: .3;
 }
 
+.timeline p {
+  text-align: left;
+}
+
 .timeline .date {
   border-bottom: 1px solid rgba(255, 255, 255, .1);
   margin-bottom: 1rem;
@@ -388,6 +393,16 @@ table {
   border-spacing: 10px;
 }
 /*End charts*/
+
+/*Start map*/
+#map-div {
+  border: none;
+  margin-right: auto;
+  margin-left: auto;
+  width: 80%;
+  height: 60rem;
+}
+/*End map*/
 
 /*Start comments*/
 .contact {
@@ -527,12 +542,4 @@ details[open] summary ~ * {
   100%{
     box-shadow: 0 0 0 0 rgba(253, 87, 191, 0);
   }
-}
-
-#map {
-  border: thin solid black;
-  margin-right: auto;
-  margin-left: auto;
-  width: 700px;
-  height: 500px;
 }

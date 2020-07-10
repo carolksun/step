@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="locations.js"></script>
 		<script type="text/javascript" src="script.js"></script>
   </head>
-  <body>
+  <body onload=createMap();>
     <header>
       <div class="menu-toggler">
         <div class="bar half start"></div>
@@ -40,6 +40,9 @@
           </li>
           <li>
             <a href="#charts" class="nav-link">Charts</a>
+          </li>
+          <li>
+            <a href="#map" class="nav-link">Map</a>
           </li>
           <li>
             <a href="#comments" class="nav-link">Comments</a>
@@ -234,10 +237,19 @@
     </section>
 
     <section class="map" id="map">
-      <h1> Oh, all the places I've gone! </h1>
-      <p> I've been to 66 cities, 16 states, and 18 countries! Check out the cities
-        I've visited on the map.
-			<div id="map"></div>
+      <div class="container">
+        <div class="section-heading">
+          <h1>Map</h1>
+        </div>
+        <div data-aos="fade-right" data-aos-delay="300">
+          <p>
+            Oh, all the places I've gone! I've been to 66 cities, 16 states, and
+            18 countries! Check out the cities I've visited on the map.
+          </p>
+          <br>
+        </div>
+        <div id="map-div"></div>
+      </div>
     </section>
 
     <section class="comments" id="comments">
