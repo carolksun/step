@@ -10,9 +10,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="script.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCquKXcwHNhkMx8qPuRIzIsw15ixHt4HLw"></script>
+    <script type="text/javascript" src="locations.js"></script>
+    <script type="text/javascript" src="script.js"></script>
   </head>
-  <body>
+  <body onload="createMap()">
     <header>
       <div class="menu-toggler">
         <div class="bar half start"></div>
@@ -38,6 +40,9 @@
           </li>
           <li>
             <a href="#charts" class="nav-link">Charts</a>
+          </li>
+          <li>
+            <a href="#map" class="nav-link">Map</a>
           </li>
           <li>
             <a href="#comments" class="nav-link">Comments</a>
@@ -182,7 +187,7 @@
                 Google Cloud Platform to create a boosted tree model that could
                 save the company 10% of its costs. This project is now working
                 in production!
-            </p>
+              </p>
             </li>
             <li class="date" data-date="Summer 2017, 2018">
               <h1>National Institues of Health</h1>
@@ -228,6 +233,22 @@
             </td>
           </tr>
         </table>
+      </div>
+    </section>
+
+    <section class="map" id="map">
+      <div class="container">
+        <div class="section-heading">
+          <h1>Map</h1>
+        </div>
+        <div data-aos="fade-right" data-aos-delay="300">
+          <p>
+            Oh, all the places I've gone! I've been to 66 cities, 16 states, and
+            18 countries! Check out the cities I've visited on the map.
+          </p>
+          <br>
+        </div>
+        <div id="map-div"></div>
       </div>
     </section>
 
