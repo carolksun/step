@@ -397,8 +397,7 @@ table {
 /*Start map*/
 #map-div {
   border: none;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto 0 auto;
   width: 80%;
   height: 60rem;
 }
@@ -447,8 +446,7 @@ textarea {
 .comment {
   border: none;
   display: flex;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto 0 auto;
   padding: 10px;
   width: 600px;
 }
