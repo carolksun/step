@@ -58,7 +58,7 @@ public final class FindMeetingQuery {
     
     // sort the events to be in order by start time O(n log n)
     List<Event> events_list = new ArrayList<Event>(events); 
-    Collections.sort(events_list); 
+    Collections.sort(events_list, Event.ORDER_BY_START); 
 
     List<TimeRange> possibleTimes = new ArrayList<>();
 
@@ -80,13 +80,17 @@ public final class FindMeetingQuery {
       allAttendees.addAll(optional);
       MeetingRequest new_request = new MeetingRequest(allAttendees, duration);
       Collection<TimeRange> slotsOptional = intervalFinder(events_list, new_request, possibleTimes);
-      if (slotsOptional.size() > 0){
+      if (slotsOptional.size() > 0) {
         return slotsOptional;
       }
-      else if (attendees.size() == 0){
+      else if (attendees.size() == 0) {
         return possibleTimes;
       }
     }
     return intervalFinder(events_list, request, possibleTimes);
   }
 }
+
+/* Determine what time period has the least overlaps for optional attendees.
+   If only a time periond only has one optional attendee that can't make it,
+   then kick them out.*/
