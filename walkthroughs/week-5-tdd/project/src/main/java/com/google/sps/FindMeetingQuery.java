@@ -26,11 +26,11 @@ import java.util.ArrayList;
 public final class FindMeetingQuery {
   /**
    * Finds the possible TimeRanges where the mandatory attendees can attend.
-   * @param events_list sorted list of events in ascending start time order
+   * @param eventsList sorted list of events in ascending start time order
    * @param request includes mandatory attendees and duration of meeting
    * @return collection of possible TimeRanges the meeting can be scheduled in  
    */
-  private Collection<TimeRange> intervalFinder(List<Event> events_list, MeetingRequest request) {
+  private Collection<TimeRange> intervalFinder(List<Event> eventsList, MeetingRequest request) {
     Collection<String> mandatory = request.getAttendees();
     long duration = request.getDuration();
     List<TimeRange> possibleTimes = new ArrayList<>();
@@ -42,7 +42,7 @@ public final class FindMeetingQuery {
      * the meeting, then it is a possible time.
      */
     int prevEnd = 0;
-    for (Event e : events_list){
+    for (Event e : eventsList){
       Collection<String> intersection = new HashSet<>(mandatory);
       intersection.retainAll(e.getAttendees());
       TimeRange range = e.getWhen();
@@ -64,14 +64,14 @@ public final class FindMeetingQuery {
 
   /**
    * Finds a specific attendee's events for the day.
-   * @param events_list sorted list of events in ascending start time order
+   * @param eventsList sorted list of events in ascending start time order
    * @param attendee specific attendee to search for
    * @return collection of events that attendee has on the schedule
    */
-  private Collection<Event> eventFinderWithAttendee(Collection<Event> events_list, String attendee) {
+  private Collection<Event> eventFinderWithAttendee(Collection<Event> eventsList, String attendee) {
     List<Event> eventsByAttendee = new ArrayList<Event>(); 
 
-    for (Event e : events_list){
+    for (Event e : eventsList){
       if (e.getAttendees().contains(attendee)){
         eventsByAttendee.add(e);
       }
@@ -89,16 +89,16 @@ public final class FindMeetingQuery {
    * Range:  |-------------|
    * Event:       |---|
    * Return: |----|   |----|
-   * @param sorted_events sorted list of events in ascending start time order
+   * @param eventsList sorted list of events in ascending start time order
    * @param range large range to split into smaller ranges
    * @param duration how long the request is for
    * @return collection of TimeRanges that was part of the large range without event overlaps
    */
-  private Collection<TimeRange> rangeSplitByNestedEvents(Collection<Event> sorted_events, TimeRange range, long duration) {
+  private Collection<TimeRange> rangeSplitByNestedEvents(Collection<Event> eventsList, TimeRange range, long duration) {
     List<TimeRange> splitEvents = new ArrayList<TimeRange>(); 
     int prevEndTime = range.start();
 
-    for (Event e : sorted_events) {
+    for (Event e : eventsList) {
       if (range.overlaps(e.getWhen())) {
         if (range.start() <= e.getWhen().start()) {
           TimeRange begin = TimeRange.fromStartEnd(prevEndTime, e.getWhen().start(), false);
@@ -142,6 +142,7 @@ public final class FindMeetingQuery {
         }
       }
     }
+
     if (counterOverlaps < minOverlaps) {
       bestTimes.clear();
       bestTimes.add(range);
@@ -170,8 +171,8 @@ public final class FindMeetingQuery {
     Collection<String> optional = request.getOptionalAttendees();
     
     // sort the events to be in ascending order by start time
-    List<Event> events_list = new ArrayList<Event>(events); 
-    Collections.sort(events_list, Event.ORDER_BY_START); 
+    List<Event> eventsList = new ArrayList<Event>(events); 
+    Collections.sort(eventsList, Event.ORDER_BY_START); 
     List<TimeRange> possibleTimes = new ArrayList<>();
 
     /**
@@ -192,10 +193,10 @@ public final class FindMeetingQuery {
       List<String> allAttendees = new ArrayList<>(mandatory);
       allAttendees.addAll(optional);
       // Create new meeting request with mandatory and optional attendees as mandatory
-      MeetingRequest new_request = new MeetingRequest(allAttendees, duration);
+      MeetingRequest newRequest = new MeetingRequest(allAttendees, duration);
 
       // Find possible time ranges with all mandatory and all optional attendees
-      Collection<TimeRange> slotsOptional = intervalFinder(events_list, new_request);
+      Collection<TimeRange> slotsOptional = intervalFinder(eventsList, newRequest);
       
       // if there is a time with all mandatory and optional attendees, then return
       if (slotsOptional.size() > 0) {
@@ -209,11 +210,11 @@ public final class FindMeetingQuery {
        *
        */
       else if (optional.size() > 1) {
-        Collection<TimeRange> availableTimesMand = intervalFinder(events_list, request);
+        Collection<TimeRange> availableTimesMand = intervalFinder(eventsList, request);
 
         Set<TimeRange> containedSet = new HashSet<>();
         for (String opAttendee : optional) {
-          Collection<Event> eventsWithAttendee = eventFinderWithAttendee(events_list, opAttendee);
+          Collection<Event> eventsWithAttendee = eventFinderWithAttendee(eventsList, opAttendee);
           for (TimeRange range : availableTimesMand) {
             containedSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));
           }
@@ -259,6 +260,6 @@ public final class FindMeetingQuery {
       }
     }
     /* If there are no optional attendees, then find the possible times. */
-    return intervalFinder(events_list, request);
+    return intervalFinder(eventsList, request);
   }
 }
