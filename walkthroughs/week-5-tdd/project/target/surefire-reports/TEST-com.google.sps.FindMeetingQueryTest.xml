@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="26" failures="0" name="com.google.sps.FindMeetingQueryTest" time="0.03" errors="0" skipped="0">
+<testsuite tests="26" failures="0" name="com.google.sps.FindMeetingQueryTest" time="0.069" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64"/>
@@ -61,30 +61,30 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="everyAttendeeOptionalSingleEvent" time="0.012"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="everyAttendeeOptionalSingleEvent" time="0.021"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="noMandatoryAttendees" time="0.004"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="noMandatoryAttendeesSingleNoTime" time="0.001"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="containedEventSurpassesRange" time="0.002"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="containedEventSurpassesRange" time="0.006"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="eventSplitsRestriction" time="0.001"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="everyAttendeeOptionalAllDay" time="0.001"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="optionalNoTime" time="0"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="optionalNoTime" time="0.001"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="overlappingEvents" time="0"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="notEnoughRoom" time="0.001"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="negativeDuration" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="justEnoughRoom" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="ignoresPeopleNotAttending" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noTimeOptionalAttendees" time="0.001"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noOptionsForTooLongOfARequest" time="0"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="negativeDuration" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="justEnoughRoom" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="ignoresPeopleNotAttending" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noTimeOptionalAttendees" time="0.008"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noOptionsForTooLongOfARequest" time="0.001"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="everyAttendeeIsConsidered" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="lotsOfAttendees" time="0.002"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="lotsOfAttendees" time="0.005"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="justEnoughRoomOptional" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="shorterTimeRangeOptionalAttendees" time="0.001"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="onlyOneOptionalAttendeeMakesIt" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="shorterTimeRangeOptionalAttendees" time="0.005"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="onlyOneOptionalAttendeeMakesIt" time="0.002"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="nestedEvents" time="0"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="optionsForNoAttendees" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noConflicts" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="onlyOptionalAttendees" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noConflicts" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="onlyOptionalAttendees" time="0"/>
   <testcase classname="com.google.sps.FindMeetingQueryTest" name="doubleBookedPeople" time="0.001"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noMandatoryAttendeesMultipleNoTime" time="0"/>
-  <testcase classname="com.google.sps.FindMeetingQueryTest" name="multipleContainedEventSurpassesRange" time="0.001"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="noMandatoryAttendeesMultipleNoTime" time="0.002"/>
+  <testcase classname="com.google.sps.FindMeetingQueryTest" name="multipleContainedEventSurpassesRange" time="0.005"/>
 </testsuite>

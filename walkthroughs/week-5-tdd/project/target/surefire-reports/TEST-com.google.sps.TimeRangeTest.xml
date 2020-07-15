@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="9" failures="0" name="com.google.sps.TimeRangeTest" time="0.004" errors="0" skipped="0">
+<testsuite tests="9" failures="0" name="com.google.sps.TimeRangeTest" time="0" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64"/>
@@ -61,13 +61,13 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="com.google.sps.TimeRangeTest" name="rangeContainsSelf" time="0.001"/>
-  <testcase classname="com.google.sps.TimeRangeTest" name="containsPoint" time="0.001"/>
+  <testcase classname="com.google.sps.TimeRangeTest" name="rangeContainsSelf" time="0"/>
+  <testcase classname="com.google.sps.TimeRangeTest" name="containsPoint" time="0"/>
   <testcase classname="com.google.sps.TimeRangeTest" name="containsRange" time="0"/>
   <testcase classname="com.google.sps.TimeRangeTest" name="canContainEmptyRange" time="0"/>
-  <testcase classname="com.google.sps.TimeRangeTest" name="canOverlapEmptyRange" time="0.001"/>
+  <testcase classname="com.google.sps.TimeRangeTest" name="canOverlapEmptyRange" time="0"/>
   <testcase classname="com.google.sps.TimeRangeTest" name="rangeOverlapsSelf" time="0"/>
-  <testcase classname="com.google.sps.TimeRangeTest" name="overlaps" time="0.001"/>
+  <testcase classname="com.google.sps.TimeRangeTest" name="overlaps" time="0"/>
   <testcase classname="com.google.sps.TimeRangeTest" name="equality" time="0"/>
   <testcase classname="com.google.sps.TimeRangeTest" name="emptyRangeContainsNothing" time="0"/>
 </testsuite>

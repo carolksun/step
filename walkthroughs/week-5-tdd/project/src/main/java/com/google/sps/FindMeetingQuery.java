@@ -142,6 +142,8 @@ public final class FindMeetingQuery {
         }
       }
     }
+    System.out.println("range: " + range + ", overlaps: " + counterOverlaps);
+
     if (counterOverlaps < minOverlaps) {
       bestTimes.clear();
       bestTimes.add(range);

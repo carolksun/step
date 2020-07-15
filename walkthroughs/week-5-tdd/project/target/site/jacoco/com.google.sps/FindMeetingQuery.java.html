@@ -142,15 +142,17 @@ import java.util.ArrayList;
         }
 <span class="fc" id="L143">      }</span>
 <span class="fc" id="L144">    }</span>
-<span class="fc bfc" id="L145" title="All 2 branches covered.">    if (counterOverlaps &lt; minOverlaps) {</span>
-<span class="fc" id="L146">      bestTimes.clear();</span>
-<span class="fc" id="L147">      bestTimes.add(range);</span>
-<span class="fc" id="L148">      return counterOverlaps;</span>
+<span class="fc" id="L145">    System.out.println(&quot;range: &quot; + range + &quot;, overlaps: &quot; + counterOverlaps);</span>
+
+<span class="fc bfc" id="L147" title="All 2 branches covered.">    if (counterOverlaps &lt; minOverlaps) {</span>
+<span class="fc" id="L148">      bestTimes.clear();</span>
+<span class="fc" id="L149">      bestTimes.add(range);</span>
+<span class="fc" id="L150">      return counterOverlaps;</span>
     }
-<span class="fc bfc" id="L150" title="All 2 branches covered.">    else if (counterOverlaps == minOverlaps) {</span>
-<span class="fc" id="L151">      bestTimes.add(range);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">    else if (counterOverlaps == minOverlaps) {</span>
+<span class="fc" id="L153">      bestTimes.add(range);</span>
     }
-<span class="fc" id="L153">    return minOverlaps;</span>
+<span class="fc" id="L155">    return minOverlaps;</span>
   }
 
   /** 
@@ -164,42 +166,42 @@ import java.util.ArrayList;
    */
   public Collection&lt;TimeRange&gt; query(Collection&lt;Event&gt; events, MeetingRequest
 		  request) {
-<span class="fc" id="L167">    long duration = request.getDuration();</span>
+<span class="fc" id="L169">    long duration = request.getDuration();</span>
  
-<span class="fc" id="L169">    Collection&lt;String&gt; mandatory = request.getAttendees();</span>
-<span class="fc" id="L170">    Collection&lt;String&gt; optional = request.getOptionalAttendees();</span>
+<span class="fc" id="L171">    Collection&lt;String&gt; mandatory = request.getAttendees();</span>
+<span class="fc" id="L172">    Collection&lt;String&gt; optional = request.getOptionalAttendees();</span>
     
     /* Sort the events to be in ascending order by start time. */
-<span class="fc" id="L173">    List&lt;Event&gt; eventsList = new ArrayList&lt;Event&gt;(events); </span>
-<span class="fc" id="L174">    Collections.sort(eventsList, Event.ORDER_BY_START); </span>
-<span class="fc" id="L175">    List&lt;TimeRange&gt; possibleTimes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L175">    List&lt;Event&gt; eventsList = new ArrayList&lt;Event&gt;(events); </span>
+<span class="fc" id="L176">    Collections.sort(eventsList, Event.ORDER_BY_START); </span>
+<span class="fc" id="L177">    List&lt;TimeRange&gt; possibleTimes = new ArrayList&lt;&gt;();</span>
 
     /**
      * If the duration of meeting is longer than a day or less than 0 minutes,
      * then there are no meeting times. 
      */
-<span class="fc bfc" id="L181" title="All 4 branches covered.">    if (duration &gt; TimeRange.getTimeInMinutes(23, 59) || duration &lt; 0) {</span>
-<span class="fc" id="L182">      return possibleTimes;</span>
+<span class="fc bfc" id="L183" title="All 4 branches covered.">    if (duration &gt; TimeRange.getTimeInMinutes(23, 59) || duration &lt; 0) {</span>
+<span class="fc" id="L184">      return possibleTimes;</span>
     }
     
     /* If there are no events for the day, then the meeting can be any time. */
-<span class="fc bfc" id="L186" title="All 2 branches covered.">    if (events.size() == 0) {</span>
-<span class="fc" id="L187">      possibleTimes.add(TimeRange.WHOLE_DAY);</span>
-<span class="fc" id="L188">      return possibleTimes;</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">    if (events.size() == 0) {</span>
+<span class="fc" id="L189">      possibleTimes.add(TimeRange.WHOLE_DAY);</span>
+<span class="fc" id="L190">      return possibleTimes;</span>
     }
     
-<span class="fc bfc" id="L191" title="All 2 branches covered.">    if (optional.size() &gt; 0) {</span>
-<span class="fc" id="L192">      List&lt;String&gt; allAttendees = new ArrayList&lt;&gt;(mandatory);</span>
-<span class="fc" id="L193">      allAttendees.addAll(optional);</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">    if (optional.size() &gt; 0) {</span>
+<span class="fc" id="L194">      List&lt;String&gt; allAttendees = new ArrayList&lt;&gt;(mandatory);</span>
+<span class="fc" id="L195">      allAttendees.addAll(optional);</span>
       /* Create new meeting request with mandatory and optional attendees as mandatory */
-<span class="fc" id="L195">      MeetingRequest newRequest = new MeetingRequest(allAttendees, duration);</span>
+<span class="fc" id="L197">      MeetingRequest newRequest = new MeetingRequest(allAttendees, duration);</span>
 
       /* Find possible time ranges with all mandatory and all optional attendees */
-<span class="fc" id="L198">      Collection&lt;TimeRange&gt; slotsOptional = intervalFinder(eventsList, newRequest);</span>
+<span class="fc" id="L200">      Collection&lt;TimeRange&gt; slotsOptional = intervalFinder(eventsList, newRequest);</span>
       
       /* if there is a time with all mandatory and optional attendees, then return */
-<span class="fc bfc" id="L201" title="All 2 branches covered.">      if (slotsOptional.size() &gt; 0) {</span>
-<span class="fc" id="L202">        return slotsOptional;</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">      if (slotsOptional.size() &gt; 0) {</span>
+<span class="fc" id="L204">        return slotsOptional;</span>
       }
       /** 
        * If there is no time where everyone can make it, and there is more than 
@@ -208,21 +210,21 @@ import java.util.ArrayList;
        * mandatory attendees are available, then split the mandatory range into 
        * smaller ranges that exclude the overlapping optional event.
        */
-<span class="fc bfc" id="L211" title="All 2 branches covered.">      else if (optional.size() &gt; 1) {</span>
-<span class="fc" id="L212">        Collection&lt;TimeRange&gt; availableTimesMand = intervalFinder(eventsList, request);</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">      else if (optional.size() &gt; 1) {</span>
+<span class="fc" id="L214">        Collection&lt;TimeRange&gt; availableTimesMand = intervalFinder(eventsList, request);</span>
 
-<span class="fc" id="L214">        Set&lt;TimeRange&gt; containedSet = new HashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">        for (String opAttendee : optional) {</span>
-<span class="fc" id="L216">          Collection&lt;Event&gt; eventsWithAttendee = eventFinderWithAttendee(eventsList, opAttendee);</span>
-<span class="fc bfc" id="L217" title="All 2 branches covered.">          for (TimeRange range : availableTimesMand) {</span>
-<span class="fc" id="L218">            containedSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));</span>
-<span class="fc" id="L219">          }</span>
-<span class="fc" id="L220">        }</span>
-<span class="fc" id="L221">        List&lt;TimeRange&gt; contained = new ArrayList&lt;&gt;(containedSet);</span>
+<span class="fc" id="L216">        Set&lt;TimeRange&gt; containedSet = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for (String opAttendee : optional) {</span>
+<span class="fc" id="L218">          Collection&lt;Event&gt; eventsWithAttendee = eventFinderWithAttendee(eventsList, opAttendee);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">          for (TimeRange range : availableTimesMand) {</span>
+<span class="fc" id="L220">            containedSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));</span>
+<span class="fc" id="L221">          }</span>
+<span class="fc" id="L222">        }</span>
+<span class="fc" id="L223">        List&lt;TimeRange&gt; contained = new ArrayList&lt;&gt;(containedSet);</span>
 
         /* Store the times with the minimum amount of event overlaps. */
-<span class="fc" id="L224">        List&lt;TimeRange&gt; bestTimes = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L225">        int minOverlaps = Integer.MAX_VALUE;</span>
+<span class="fc" id="L226">        List&lt;TimeRange&gt; bestTimes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L227">        int minOverlaps = Integer.MAX_VALUE;</span>
 
        /**
         * If there are events that are contained within the mandatory ranges,
@@ -230,12 +232,12 @@ import java.util.ArrayList;
         * that would not be able to make it. Return the ranges
         * with the least amount of overlaps with the optional attendees.
         */
-<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (contained.size() &gt; 0) {</span>
-<span class="fc bfc" id="L234" title="All 2 branches covered.">          for (TimeRange c : contained) {</span>
-<span class="fc" id="L235">	          minOverlaps = optionalCounter(bestTimes, events, optional, c,</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (contained.size() &gt; 0) {</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">          for (TimeRange c : contained) {</span>
+<span class="fc" id="L237">	          minOverlaps = optionalCounter(bestTimes, events, optional, c,</span>
 			        minOverlaps);
-<span class="fc" id="L237">          }</span>
-<span class="fc" id="L238">          return bestTimes;</span>
+<span class="fc" id="L239">          }</span>
+<span class="fc" id="L240">          return bestTimes;</span>
         }
         /**
         * If there are no events that are contained within the mandatory ranges,
@@ -244,22 +246,22 @@ import java.util.ArrayList;
         * with the least amount of overlaps with the optional attendees.
         */
         else {
-<span class="fc bfc" id="L247" title="All 2 branches covered.">          for (TimeRange range : availableTimesMand) {</span>
-<span class="fc" id="L248">            minOverlaps = optionalCounter(bestTimes, events, optional, range, minOverlaps);</span>
-<span class="fc" id="L249">          }</span>
-<span class="fc" id="L250">          return bestTimes;</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">          for (TimeRange range : availableTimesMand) {</span>
+<span class="fc" id="L250">            minOverlaps = optionalCounter(bestTimes, events, optional, range, minOverlaps);</span>
+<span class="fc" id="L251">          }</span>
+<span class="fc" id="L252">          return bestTimes;</span>
         }
       }
       /**
        * If there are no mandatory attendees and there are no meeting times 
        * for all optional attendees, then return an empty collection.
        */
-<span class="fc bfc" id="L257" title="All 2 branches covered.">      else if (mandatory.size() == 0) {</span>
-<span class="fc" id="L258">        return possibleTimes;</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">      else if (mandatory.size() == 0) {</span>
+<span class="fc" id="L260">        return possibleTimes;</span>
       }
     }
     /* If there are no optional attendees, then find the possible times. */
-<span class="fc" id="L262">    return intervalFinder(eventsList, request);</span>
+<span class="fc" id="L264">    return intervalFinder(eventsList, request);</span>
   }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
