@@ -46,7 +46,7 @@ public final class FindMeetingQuery {
       Collection<String> intersection = new HashSet<>(mandatory);
       intersection.retainAll(e.getAttendees());
       TimeRange range = e.getWhen();
-      if (intersection.size() > 0) {
+      if (!intersection.isEmpty()) {
         TimeRange possibleRange = TimeRange.fromStartEnd(prevEnd, range.start(), false);
         if (duration <= possibleRange.duration()) {
           possibleTimes.add(possibleRange);
@@ -184,12 +184,12 @@ public final class FindMeetingQuery {
     }
     
     /* If there are no events for the day, then the meeting can be any time. */
-    if (events.size() == 0) {
+    if (events.isEmpty()) {
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
     
-    if (optional.size() > 0) {
+    if (!optional.isEmpty()) {
       List<String> allAttendees = new ArrayList<>(mandatory);
       allAttendees.addAll(optional);
       // Create new meeting request with mandatory and optional attendees as mandatory
@@ -199,7 +199,7 @@ public final class FindMeetingQuery {
       Collection<TimeRange> slotsOptional = intervalFinder(eventsList, newRequest);
       
       // if there is a time with all mandatory and optional attendees, then return
-      if (slotsOptional.size() > 0) {
+      if (!slotsOptional.isEmpty()) {
         return slotsOptional;
       }
       /** 
@@ -231,7 +231,7 @@ public final class FindMeetingQuery {
         * that would not be able to make it. Return the ranges
         * with the least amount of overlaps with the optional attendees.
         */
-        if (contained.size() > 0) {
+        if (!contained.isEmpty()) {
           for (TimeRange c : contained) {
 	          minOverlaps = optionalCounter(bestTimes, events, optional, c,
 			        minOverlaps);
@@ -255,7 +255,7 @@ public final class FindMeetingQuery {
        * If there are no mandatory attendees and there are no meeting times 
        * for all optional attendees, then return an empty collection.
        */
-      else if (mandatory.size() == 0) {
+      else if (mandatory.isEmpty()) {
         return possibleTimes;
       }
     }
