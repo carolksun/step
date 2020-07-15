@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeRange.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gcloud-tutorials-calendar</a> &gt; <a href="index.source.html" class="el_package">com.google.sps</a> &gt; <span class="el_source">TimeRange.java</span></div><h1>TimeRange.java</h1><pre class="source lang-java linenums">// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.google.sps;
+
+import java.util.Comparator;
+
+/**
+ * Class representing a span of time, enforcing properties (e.g. start comes before end) and
+ * providing methods to make ranges easier to work with (e.g. {@code overlaps}).
+ */
+public final class TimeRange {
+<span class="fc" id="L24">  public static final int START_OF_DAY = getTimeInMinutes(0, 0);</span>
+<span class="fc" id="L25">  public static final int END_OF_DAY = getTimeInMinutes(23, 59);</span>
+
+<span class="fc" id="L27">  public static final TimeRange WHOLE_DAY = new TimeRange(0, 24 * 60);</span>
+
+  /**
+   * A comparator for sorting ranges by their start time in ascending order.
+   */
+<span class="fc" id="L32">  public static final Comparator&lt;TimeRange&gt; ORDER_BY_START = new Comparator&lt;TimeRange&gt;() {</span>
+    @Override
+    public int compare(TimeRange a, TimeRange b) {
+<span class="nc" id="L35">      return Long.compare(a.start, b.start);</span>
+    }
+  };
+
+  /**
+   * A comparator for sorting ranges by their end time in ascending order.
+   */
+<span class="fc" id="L42">  public static final Comparator&lt;TimeRange&gt; ORDER_BY_END = new Comparator&lt;TimeRange&gt;() {</span>
+    @Override
+    public int compare(TimeRange a, TimeRange b) {
+<span class="nc" id="L45">      return Long.compare(a.end(), b.end());</span>
+    }
+  };
+
+  private final int start;
+  private final int duration;
+
+<span class="fc" id="L52">  private TimeRange(int start, int duration) {</span>
+<span class="fc" id="L53">    this.start = start;</span>
+<span class="fc" id="L54">    this.duration = duration;</span>
+<span class="fc" id="L55">  }</span>
+
+  /**
+   * Returns the start of the range in minutes.
+   */
+  public int start() {
+<span class="fc" id="L61">    return start;</span>
+  }
+
+  /**
+   * Returns the number of minutes between the start and end.
+   */
+  public int duration() {
+<span class="fc" id="L68">    return duration;</span>
+  }
+
+  /**
+   * Returns the end of the range. This ending value is the closing exclusive bound.
+   */
+  public int end() {
+<span class="fc" id="L75">    return start + duration;</span>
+  }
+
+  /**
+   * Checks if two ranges overlap. This means that at least some part of one range falls within the
+   * bounds of another range.
+   */
+  public boolean overlaps(TimeRange other) {
+    // For two ranges to overlap, one range must contain the start of another range.
+    //
+    // Case 1: |---| |---|
+    //
+    // Case 2: |---|
+    //            |---|
+    //
+    // Case 3: |---------|
+    //            |---|
+<span class="fc bfc" id="L92" title="All 4 branches covered.">    return this.contains(other.start) || other.contains(this.start);</span>
+  }
+
+  /**
+   * Checks if this range completely contains another range. This means that {@code other} is a
+   * subset of this range. This is an inclusive bounds, meaning that if two ranges are the same,
+   * they contain each other.
+   */
+  public boolean contains(TimeRange other) {
+    // If this range has no duration, it cannot contain anything.
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    if (duration &lt;= 0) {</span>
+<span class="fc" id="L103">      return false;</span>
+    }
+
+    // If the other range has no duration, then we must treat it like a point in time rather than a
+    // range.
+<span class="fc bfc" id="L108" title="All 2 branches covered.">    if (other.duration &lt;= 0) {</span>
+<span class="fc" id="L109">      return contains(this, other.start);</span>
+    }
+
+    // We need the inclusive end for this check in order for this case to equal true:
+    // |------|
+    //     |--|
+<span class="fc" id="L115">    int otherInclusiveEnd = other.start + other.duration - 1;</span>
+<span class="fc bfc" id="L116" title="All 4 branches covered.">    return contains(this, other.start) &amp;&amp; contains(this, otherInclusiveEnd);</span>
+  }
+
+  public boolean contains(int point) {
+<span class="fc" id="L120">    return contains(this, point);</span>
+  }
+
+  @Override
+  public boolean equals(Object other) {
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">    return other instanceof TimeRange &amp;&amp; equals(this, (TimeRange) other);</span>
+  }
+
+  @Override
+  public int hashCode() {
+<span class="fc" id="L130">    return Long.hashCode(start) ^ Long.hashCode(duration);</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="fc" id="L135">    return String.format(&quot;Range: [%d, %d)&quot;, start, start + duration);</span>
+  }
+
+  private static boolean contains(TimeRange range, int point) {
+    // If a range has no duration, it cannot contain anything.
+<span class="fc bfc" id="L140" title="All 2 branches covered.">    if (range.duration &lt;= 0) {</span>
+<span class="fc" id="L141">      return false;</span>
+    }
+
+    // If the point comes before the start of the range, the range cannot contain it.
+<span class="fc bfc" id="L145" title="All 2 branches covered.">    if (point &lt; range.start) {</span>
+<span class="fc" id="L146">      return false;</span>
+    }
+
+    // If the point is on the end of the range. We don't count it as included in the range. For
+    // example, if we have a range that starts at 8:00 and is 30 minutes long, it would end at 8:30.
+    // But that range should on contain 8:30 because it would end just before 8:30 began.
+<span class="fc bfc" id="L152" title="All 2 branches covered.">    return point &lt; range.start + range.duration;</span>
+  }
+
+  private static boolean equals(TimeRange a, TimeRange b) {
+<span class="fc bfc" id="L156" title="All 4 branches covered.">    return a.start == b.start &amp;&amp; a.duration == b.duration;</span>
+  }
+
+  public static int getTimeInMinutes(int hours, int minutes) {
+<span class="pc bpc" id="L160" title="2 of 4 branches missed.">    if (hours &lt; 0 || hours &gt;= 24) {</span>
+<span class="nc" id="L161">      throw new IllegalArgumentException(&quot;Hours can only be 0 through 23 (inclusive).&quot;);</span>
+    }
+
+<span class="pc bpc" id="L164" title="2 of 4 branches missed.">    if (minutes &lt; 0 || minutes &gt;= 60) {</span>
+<span class="nc" id="L165">      throw new IllegalArgumentException(&quot;Minutes can only be 0 through 59 (inclusive).&quot;);</span>
+    }
+
+<span class="fc" id="L168">    return (hours * 60) + minutes;</span>
+  }
+
+  /**
+   * Creates a {@code TimeRange} from {@code start} to {@code end}. Whether or not {@code end} is
+   * included in the range will depend on {@code inclusive}. If {@code inclusive} is {@code true},
+   * then @{code end} will be in the range.
+   */
+  public static TimeRange fromStartEnd(int start, int end, boolean inclusive) {
+<span class="fc bfc" id="L177" title="All 2 branches covered.">    return inclusive ? new TimeRange(start, end - start + 1) : new TimeRange(start, end - start);</span>
+  }
+
+  /**
+   * Create a {@code TimeRange} starting at {@code start} with a duration equal to {@code duration}.
+   */
+  public static TimeRange fromStartDuration(int start, int duration) {
+<span class="fc" id="L184">    return new TimeRange(start, duration);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FindMeetingQuery.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gcloud-tutorials-calendar</a> &gt; <a href="index.source.html" class="el_package">com.google.sps</a> &gt; <span class="el_source">FindMeetingQuery.java</span></div><h1>FindMeetingQuery.java</h1><pre class="source lang-java linenums">// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.google.sps;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+
+<span class="fc" id="L26">public final class FindMeetingQuery {</span>
+  /**
+   * Finds the possible TimeRanges where the mandatory attendees can attend.
+   * @param eventsList sorted list of events in ascending start time order
+   * @param request includes mandatory attendees and duration of meeting
+   * @return collection of possible TimeRanges the meeting can be scheduled in  
+   */
+  private Collection&lt;TimeRange&gt; intervalFinder(List&lt;Event&gt; eventsList, MeetingRequest request) {
+<span class="fc" id="L34">    Collection&lt;String&gt; mandatory = request.getAttendees();</span>
+<span class="fc" id="L35">    long duration = request.getDuration();</span>
+<span class="fc" id="L36">    List&lt;TimeRange&gt; possibleTimes = new ArrayList&lt;&gt;();</span>
+
+    /** 
+     * If there are conflicting mandatory attendees, then a possible range for 
+     * the meeting request starts from the end of the previous event to the 
+     * start of the conflicting event. If this time range fits the duration of 
+     * the meeting, then it is a possible time.
+     */
+<span class="fc" id="L44">    int prevEnd = 0;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">    for (Event e : eventsList){</span>
+<span class="fc" id="L46">      Collection&lt;String&gt; intersection = new HashSet&lt;&gt;(mandatory);</span>
+<span class="fc" id="L47">      intersection.retainAll(e.getAttendees());</span>
+<span class="fc" id="L48">      TimeRange range = e.getWhen();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">      if (intersection.size() &gt; 0) {</span>
+<span class="fc" id="L50">        TimeRange possibleRange = TimeRange.fromStartEnd(prevEnd, range.start(), false);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (duration &lt;= possibleRange.duration()) {</span>
+<span class="fc" id="L52">          possibleTimes.add(possibleRange);</span>
+        }
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (prevEnd &lt; range.end()) {</span>
+<span class="fc" id="L55">          prevEnd = range.end();</span>
+        }
+      }
+<span class="fc" id="L58">    }</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    if (prevEnd != TimeRange.END_OF_DAY + 1) {</span>
+<span class="fc" id="L60">      possibleTimes.add(TimeRange.fromStartEnd(prevEnd, TimeRange.END_OF_DAY, true));</span>
+    }
+<span class="fc" id="L62">    return possibleTimes;</span>
+  }
+
+  /**
+   * Finds a specific attendee's events for the day.
+   * @param eventsList sorted list of events in ascending start time order
+   * @param attendee specific attendee to search for
+   * @return collection of events that attendee has on the schedule
+   */
+  private Collection&lt;Event&gt; eventFinderWithAttendee(Collection&lt;Event&gt; eventsList, String attendee) {
+<span class="fc" id="L72">    List&lt;Event&gt; eventsByAttendee = new ArrayList&lt;Event&gt;(); </span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">    for (Event e : eventsList){</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">      if (e.getAttendees().contains(attendee)){</span>
+<span class="fc" id="L76">        eventsByAttendee.add(e);</span>
+      }
+<span class="fc" id="L78">    }</span>
+<span class="fc" id="L79">    return eventsByAttendee;</span>
+  }
+
+  /**
+   * Split large range into smaller pieces excluding overlapping events. If an 
+   * event overlaps with the range, then the range can be broken into the subset
+   * of the range that occurs before the first event and additional gaps between
+   * events. We take the ranges between the end of the previous event and the 
+   * start of the next event, adding a range from the last event's end time to 
+   * the end of the range if necessary.
+   * Range:  |-------------|
+   * Event:       |---|
+   * Return: |----|   |----|
+   * @param eventsList sorted list of events in ascending start time order
+   * @param range large range to split into smaller ranges
+   * @param duration how long the request is for
+   * @return collection of TimeRanges that was part of the large range without event overlaps
+   */
+  private Collection&lt;TimeRange&gt; rangeSplitByNestedEvents(Collection&lt;Event&gt; eventsList, TimeRange range, long duration) {
+<span class="fc" id="L98">    List&lt;TimeRange&gt; splitEvents = new ArrayList&lt;TimeRange&gt;(); </span>
+<span class="fc" id="L99">    int prevEndTime = range.start();</span>
+
+<span class="fc bfc" id="L101" title="All 2 branches covered.">    for (Event e : eventsList) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">      if (range.overlaps(e.getWhen())) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (range.start() &lt;= e.getWhen().start()) {</span>
+<span class="fc" id="L104">          TimeRange begin = TimeRange.fromStartEnd(prevEndTime, e.getWhen().start(), false);</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">          if (begin.duration() &gt;= duration){</span>
+<span class="fc" id="L106">            splitEvents.add(begin);</span>
+          }
+        }
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (prevEndTime &lt; e.getWhen().end()){</span>
+<span class="fc" id="L110">          prevEndTime = e.getWhen().end();</span>
+        }
+      }
+<span class="fc" id="L113">    }</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">    if (prevEndTime &lt; range.end()) {</span>
+<span class="fc" id="L115">      splitEvents.add(TimeRange.fromStartEnd(prevEndTime, range.end(), false));</span>
+    }
+<span class="fc" id="L117">    return splitEvents;</span>
+  }
+
+  /** 
+   * Counts the number of optional attendees that can not make it to the meeting at
+   * the time range and compares it to the minimum number of optional attendees that
+   * can not make it for other time ranges.
+   * @param bestTimes collection which has the TimeRanges of meetings that has 
+   * the minOverlap attendees 
+   * @param events events of the day
+   * @param optional optional attendees for the meeting 
+   * @param range range in question to see how many optional attendees can not make it 
+   * @param minOverlaps current minimum number of optional attendees that can not make
+   * it to the meeting at the TimeRange
+   * @return the minimum of current range's overlaps and minOverlaps
+   */
+  private int optionalCounter(Collection&lt;TimeRange&gt; bestTimes,
+		  Collection&lt;Event&gt; events, Collection&lt;String&gt; optional,
+		  TimeRange range, int minOverlaps) {
+<span class="fc" id="L136">    int counterOverlaps = 0;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">    for (String opAttendee : optional) {</span>
+<span class="fc" id="L138">      Collection&lt;Event&gt; eventsWithAttendee = eventFinderWithAttendee(events, opAttendee);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">      for (Event e : eventsWithAttendee){</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (e.getWhen().overlaps(range)) {</span>
+<span class="fc" id="L141">          counterOverlaps += 1;</span>
+        }
+<span class="fc" id="L143">      }</span>
+<span class="fc" id="L144">    }</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">    if (counterOverlaps &lt; minOverlaps) {</span>
+<span class="fc" id="L146">      bestTimes.clear();</span>
+<span class="fc" id="L147">      bestTimes.add(range);</span>
+<span class="fc" id="L148">      return counterOverlaps;</span>
+    }
+<span class="fc bfc" id="L150" title="All 2 branches covered.">    else if (counterOverlaps == minOverlaps) {</span>
+<span class="fc" id="L151">      bestTimes.add(range);</span>
+    }
+<span class="fc" id="L153">    return minOverlaps;</span>
+  }
+
+  /** 
+   * Determines the TimeRanges where the mandatory and as many optional
+   * attendees as possible can attend the meeting.
+   * @param events events of the day 
+   * @param request includes mandatory and optional attendees, and the duration 
+   * of the meeting 
+   * @return collection of TimeRanges where all mandatory and the greatest 
+   * number of optional attendees can be at the meeting
+   */
+  public Collection&lt;TimeRange&gt; query(Collection&lt;Event&gt; events, MeetingRequest
+		  request) {
+<span class="fc" id="L167">    long duration = request.getDuration();</span>
+ 
+<span class="fc" id="L169">    Collection&lt;String&gt; mandatory = request.getAttendees();</span>
+<span class="fc" id="L170">    Collection&lt;String&gt; optional = request.getOptionalAttendees();</span>
+    
+    /* Sort the events to be in ascending order by start time. */
+<span class="fc" id="L173">    List&lt;Event&gt; eventsList = new ArrayList&lt;Event&gt;(events); </span>
+<span class="fc" id="L174">    Collections.sort(eventsList, Event.ORDER_BY_START); </span>
+<span class="fc" id="L175">    List&lt;TimeRange&gt; possibleTimes = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * If the duration of meeting is longer than a day or less than 0 minutes,
+     * then there are no meeting times. 
+     */
+<span class="fc bfc" id="L181" title="All 4 branches covered.">    if (duration &gt; TimeRange.getTimeInMinutes(23, 59) || duration &lt; 0) {</span>
+<span class="fc" id="L182">      return possibleTimes;</span>
+    }
+    
+    /* If there are no events for the day, then the meeting can be any time. */
+<span class="fc bfc" id="L186" title="All 2 branches covered.">    if (events.size() == 0) {</span>
+<span class="fc" id="L187">      possibleTimes.add(TimeRange.WHOLE_DAY);</span>
+<span class="fc" id="L188">      return possibleTimes;</span>
+    }
+    
+<span class="fc bfc" id="L191" title="All 2 branches covered.">    if (optional.size() &gt; 0) {</span>
+<span class="fc" id="L192">      List&lt;String&gt; allAttendees = new ArrayList&lt;&gt;(mandatory);</span>
+<span class="fc" id="L193">      allAttendees.addAll(optional);</span>
+      /* Create new meeting request with mandatory and optional attendees as mandatory */
+<span class="fc" id="L195">      MeetingRequest newRequest = new MeetingRequest(allAttendees, duration);</span>
+
+      /* Find possible time ranges with all mandatory and all optional attendees */
+<span class="fc" id="L198">      Collection&lt;TimeRange&gt; slotsOptional = intervalFinder(eventsList, newRequest);</span>
+      
+      /* if there is a time with all mandatory and optional attendees, then return */
+<span class="fc bfc" id="L201" title="All 2 branches covered.">      if (slotsOptional.size() &gt; 0) {</span>
+<span class="fc" id="L202">        return slotsOptional;</span>
+      }
+      /** 
+       * If there is no time where everyone can make it, and there is more than 
+       * one optional person, find the times for just the mandatory attendees. If 
+       * an event with an optional attendee is overlapping with a range that all
+       * mandatory attendees are available, then split the mandatory range into 
+       * smaller ranges that exclude the overlapping optional event.
+       */
+<span class="fc bfc" id="L211" title="All 2 branches covered.">      else if (optional.size() &gt; 1) {</span>
+<span class="fc" id="L212">        Collection&lt;TimeRange&gt; availableTimesMand = intervalFinder(eventsList, request);</span>
+
+<span class="fc" id="L214">        Set&lt;TimeRange&gt; containedSet = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        for (String opAttendee : optional) {</span>
+<span class="fc" id="L216">          Collection&lt;Event&gt; eventsWithAttendee = eventFinderWithAttendee(eventsList, opAttendee);</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">          for (TimeRange range : availableTimesMand) {</span>
+<span class="fc" id="L218">            containedSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));</span>
+<span class="fc" id="L219">          }</span>
+<span class="fc" id="L220">        }</span>
+<span class="fc" id="L221">        List&lt;TimeRange&gt; contained = new ArrayList&lt;&gt;(containedSet);</span>
+
+        /* Store the times with the minimum amount of event overlaps. */
+<span class="fc" id="L224">        List&lt;TimeRange&gt; bestTimes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L225">        int minOverlaps = Integer.MAX_VALUE;</span>
+
+       /**
+        * If there are events that are contained within the mandatory ranges,
+        * for every range in contained, count the number of optional attendees 
+        * that would not be able to make it. Return the ranges
+        * with the least amount of overlaps with the optional attendees.
+        */
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (contained.size() &gt; 0) {</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">          for (TimeRange c : contained) {</span>
+<span class="fc" id="L235">	          minOverlaps = optionalCounter(bestTimes, events, optional, c,</span>
+			        minOverlaps);
+<span class="fc" id="L237">          }</span>
+<span class="fc" id="L238">          return bestTimes;</span>
+        }
+        /**
+        * If there are no events that are contained within the mandatory ranges,
+        * for every range in the availableTimesMand, count the number of 
+        * optional attendees that would not be able to make it. Return the ranges
+        * with the least amount of overlaps with the optional attendees.
+        */
+        else {
+<span class="fc bfc" id="L247" title="All 2 branches covered.">          for (TimeRange range : availableTimesMand) {</span>
+<span class="fc" id="L248">            minOverlaps = optionalCounter(bestTimes, events, optional, range, minOverlaps);</span>
+<span class="fc" id="L249">          }</span>
+<span class="fc" id="L250">          return bestTimes;</span>
+        }
+      }
+      /**
+       * If there are no mandatory attendees and there are no meeting times 
+       * for all optional attendees, then return an empty collection.
+       */
+<span class="fc bfc" id="L257" title="All 2 branches covered.">      else if (mandatory.size() == 0) {</span>
+<span class="fc" id="L258">        return possibleTimes;</span>
+      }
+    }
+    /* If there are no optional attendees, then find the possible times. */
+<span class="fc" id="L262">    return intervalFinder(eventsList, request);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

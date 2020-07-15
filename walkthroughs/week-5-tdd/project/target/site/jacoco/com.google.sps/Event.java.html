@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Event.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gcloud-tutorials-calendar</a> &gt; <a href="index.source.html" class="el_package">com.google.sps</a> &gt; <span class="el_source">Event.java</span></div><h1>Event.java</h1><pre class="source lang-java linenums">// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.google.sps;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Event is the container class for when a specific group of people are meeting and are therefore
+ * busy. Events are considered read-only.
+ */
+public final class Event {
+  private final String title;
+  private final TimeRange when;
+<span class="fc" id="L30">  private final Set&lt;String&gt; attendees = new HashSet&lt;&gt;();</span>
+
+<span class="fc" id="L32">  public static final Comparator&lt;Event&gt; ORDER_BY_START = new Comparator&lt;Event&gt;() {</span>
+    @Override
+    public int compare(Event a, Event b) {
+<span class="fc" id="L35">      return a.when.start() - b.when.start();</span>
+    }
+  };
+
+  /**
+   * Creates a new event.
+   *
+   * @param title The human-readable name for the event. Must be non-null.
+   * @param when The time when the event takes place. Must be non-null.
+   * @param attendees The collection of people attending the event. Must be non-null.
+   */
+<span class="fc" id="L46">  public Event(String title, TimeRange when, Collection&lt;String&gt; attendees) {</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">    if (title == null) {</span>
+<span class="nc" id="L48">      throw new IllegalArgumentException(&quot;title cannot be null&quot;);</span>
+    }
+
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">    if (when == null) {</span>
+<span class="nc" id="L52">      throw new IllegalArgumentException(&quot;when cannot be null&quot;);</span>
+    }
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">    if (attendees == null) {</span>
+<span class="nc" id="L56">      throw new IllegalArgumentException(&quot;attendees cannot be null. Use empty array instead.&quot;);</span>
+    }
+
+<span class="fc" id="L59">    this.title = title;</span>
+<span class="fc" id="L60">    this.when = when;</span>
+<span class="fc" id="L61">    this.attendees.addAll(attendees);</span>
+<span class="fc" id="L62">  }</span>
+
+  /**
+   * Returns the human-readable name for this event.
+   */
+  public String getTitle() {
+<span class="nc" id="L68">    return title;</span>
+  }
+
+  /**
+   * Returns the {@code TimeRange} for when this event occurs.
+   */
+  public TimeRange getWhen() {
+<span class="fc" id="L75">    return when;</span>
+  }
+
+  /**
+   * Returns a read-only set of required attendees for this event.
+   */
+  public Set&lt;String&gt; getAttendees() {
+    // Return the attendees as an unmodifiable set so that the caller can't change our
+    // internal data.
+<span class="fc" id="L84">    return Collections.unmodifiableSet(attendees);</span>
+  }
+
+  @Override
+  public int hashCode() {
+    // For the hash code, just use the title. Most events &quot;should&quot; have different names and will
+    // mainly be used as a way to skip the costly {@code equals()} call.
+<span class="nc" id="L91">    return title.hashCode();</span>
+  }
+
+  @Override
+  public boolean equals(Object other) {
+<span class="nc bnc" id="L96" title="All 4 branches missed.">    return other instanceof Event &amp;&amp; equals(this, (Event) other);</span>
+  }
+
+  private static boolean equals(Event a, Event b) {
+    // {@code attendees} must be a set for equals to work as expected. According to the {@code Set}
+    // interface documentation, equals will check for set-equality across all set implementations.
+<span class="nc bnc" id="L102" title="All 6 branches missed.">    return a.title.equals(b.title) &amp;&amp; a.when.equals(b.when) &amp;&amp; a.attendees.equals(b.attendees);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
