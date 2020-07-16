@@ -29,7 +29,7 @@ public final class Event {
   private final TimeRange when;
   private final Set<String> attendees = new HashSet<>();
 
-  public static final Comparator<Event> ORDER_BY_START = new Comparator<Event>() {
+  public static final Comparator<Event> ORDER_BY_START_ASCENDING = new Comparator<Event>() {
     @Override
     public int compare(Event a, Event b) {
       return a.when.start() - b.when.start();
