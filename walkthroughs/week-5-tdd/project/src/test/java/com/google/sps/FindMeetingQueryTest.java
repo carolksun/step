@@ -177,7 +177,7 @@ public final class FindMeetingQueryTest {
     // should see two options.
     //
     // Events  :       |----A----|
-    //                   |--B--|    
+    //                   |--B--|
     // Day     : |---------------------|
     // Options : |--1--|         |--2--|
 
@@ -515,7 +515,6 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void shorterTimeRangeOptionalAttendees() {
-
     Collection<Event> events = Arrays.asList(
       new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
           Arrays.asList(PERSON_A)),
@@ -628,7 +627,6 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void containedEventSurpassesRange() {
-
     Collection<Event> events = Arrays.asList(
       new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
           Arrays.asList(PERSON_A)),
@@ -659,7 +657,6 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void multipleContainedEventSurpassesRange() {
-
     Collection<Event> events = Arrays.asList(
       new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
           Arrays.asList(PERSON_A)),
@@ -694,7 +691,6 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void multipleNestedEvents() {
- 
     Collection<Event> events = Arrays.asList(
       new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
           Arrays.asList(PERSON_A)),
@@ -730,7 +726,6 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void rangeStartsAfterOptionalEventStarts() {
-
     Collection<Event> events = Arrays.asList(
       new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
           Arrays.asList(PERSON_A)),
