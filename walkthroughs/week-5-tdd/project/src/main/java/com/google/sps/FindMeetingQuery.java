@@ -18,10 +18,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.TreeSet;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class FindMeetingQuery {
   /**
@@ -40,10 +41,10 @@ public final class FindMeetingQuery {
      * If there are conflicting mandatory attendees, then a possible range for 
      * the meeting request starts from the end of the previous event to the 
      * start of the conflicting event. If this time range fits the duration of 
-     * the meeting, then it is a possible time.
+     * the meeting, then it is a possible meeting time.
      */
     int prevEnd = 0;
-    for (Event e : eventsList){
+    for (Event e : eventsList) {
       Collection<String> intersection = new HashSet<>(mandatory);
       intersection.retainAll(e.getAttendees());
       TimeRange range = e.getWhen();
@@ -64,44 +65,50 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Finds a specific attendee's events for the day.
+   * Creates a map of optional attendees with their corresponding events of the day
    *
    * @param eventsList sorted list of events in ascending start time order
-   * @param attendee specific attendee to search for
-   * @return collection of events that attendee has on the schedule
+   * @param optional all optional attendees
+   * @return map of optional attendees and their events
    */
-  private Collection<Event> eventFinderWithAttendee(Collection<Event> eventsList, String attendee) {
-    List<Event> eventsByAttendee = new ArrayList<Event>(); 
+  private Map<String, Collection<Event>> eventMapMaker(Collection<Event> eventsList, Collection<String> optional) {
+    Map<String, Collection<Event>> optionalAttendeeEventsMap = new HashMap<>();
 
-    for (Event e : eventsList){
-      if (e.getAttendees().contains(attendee)){
-        eventsByAttendee.add(e);
+    for (String attendee: optional) {
+      List<Event> singleAttendeeEvents = new ArrayList<>();
+      for (Event e : eventsList) {
+        if (e.getAttendees().contains(attendee)){
+          singleAttendeeEvents.add(e);
+        }
       }
+      optionalAttendeeEventsMap.put(attendee, singleAttendeeEvents);
     }
-    return eventsByAttendee;
+    return optionalAttendeeEventsMap;
   }
 
   /**
-   * Split large range into smaller pieces excluding overlapping events. If an 
-   * event overlaps with the range, then the range can be broken into the subset
-   * of the range that occurs before the first event and additional gaps between
-   * events. We take the ranges between the end of the previous event and the 
-   * start of the next event, adding a range from the last event's end time to 
-   * the end of the range if necessary.
+   * Split large range into smaller pieces excluding events that are overlapping
+   * with the range. If an event overlaps with the range, then the range can be
+   * broken into the subset of the range that occurs before the first event and
+   * additional gaps between events. We take the ranges between the end of the 
+   * previous event and the start of the next event, adding a range from the 
+   * last event's end time to the end of the range if necessary. Each of the 
+   * ranges must have a duration of at least the duration of the meeting request.
+   *
    * Range:  |-------------|      |--------------|      |------------|
    * Event:       |---|       OR    |--|   |--|     OR    |--|   |-------|
    * Return: |----|   |----|      |-|  |---|  |--|      |-|  |---|
    * 
-   * @param eventsList sorted list of events in ascending start time order
+   * @param eventsWithAttendee List of events for a single optional attendee
    * @param range large range to split into smaller ranges
    * @param duration how long the request is for
    * @return collection of TimeRanges that was part of the large range without event overlaps
    */
-  private Collection<TimeRange> rangeSplitByNestedEvents(Collection<Event> eventsList, TimeRange range, long duration) {
+  private Collection<TimeRange> rangeSplitByNestedEvents(Collection<Event> eventsWithAttendee, TimeRange range, long duration) {
     List<TimeRange> splitEvents = new ArrayList<TimeRange>(); 
     int prevEndTime = range.start();
 
-    for (Event e : eventsList) {
+    for (Event e : eventsWithAttendee) {
       if (!range.overlaps(e.getWhen())) {
         continue;
       }
@@ -132,9 +139,9 @@ public final class FindMeetingQuery {
    *
    * @param events events of the day 
    * @param request includes mandatory and optional attendees, and the duration 
-   * of the meeting 
+   *        of the meeting 
    * @return collection of TimeRanges where all mandatory and the greatest 
-   * number of optional attendees can be at the meeting
+   *         number of optional attendees can be at the meeting
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long duration = request.getDuration();
@@ -161,7 +168,7 @@ public final class FindMeetingQuery {
       return possibleTimes;
     }
 
-    if (optional.isEmpty()){
+    if (optional.isEmpty()) {
       // If there are no optional attendees, then find the possible times. 
       return intervalFinder(eventsList, request);
     }
@@ -183,6 +190,8 @@ public final class FindMeetingQuery {
     // Find time ranges for just mandatory attendees.
     Collection<TimeRange> availableTimesMand = intervalFinder(eventsList, request);
 
+    Map<String, Collection<Event>> eventsForEachOptionalAttendee = eventMapMaker(eventsList, optional);
+
    /** 
     * If there is no time where everyone can make it, find the times for just 
     * the mandatory attendees. If an event with an optional attendee is 
@@ -192,8 +201,8 @@ public final class FindMeetingQuery {
     */
 
     Set<TimeRange> splitRangeSet = new HashSet<>(availableTimesMand);
-    for (String opAttendee : optional) {
-      Collection<Event> eventsWithAttendee = eventFinderWithAttendee(eventsList, opAttendee);
+    for (String optionalAttendee : optional) {
+      Collection<Event> eventsWithAttendee = eventsForEachOptionalAttendee.get(optionalAttendee);
       for (TimeRange range : availableTimesMand) {
         splitRangeSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));
       }
@@ -205,28 +214,28 @@ public final class FindMeetingQuery {
     int minOverlaps = Integer.MAX_VALUE;
 
     /**
-    * If there are events that are contained within the mandatory ranges,
-    * for every range in contained, count the number of optional attendees 
-    * that would not be able to make it. Store the ranges with the least amount
-    * overalaps in minOverlapTimes.
-    */
+     * If there are events that are contained within the mandatory ranges,
+     * for every range in contained, count the number of optional attendees 
+     * that would not be able to make it. Store the ranges with the least amount
+     * overlaps in minOverlapTimes.
+     */
     for (TimeRange range : splitRanges) {
-      int counterOverlaps = 0;
-      for (String opAttendee : optional) {
-        Collection<Event> eventsWithAttendee = eventFinderWithAttendee(events, opAttendee);
+      int numOverlaps = 0;
+      for (String optionalAttendee : optional) {
+        Collection<Event> eventsWithAttendee = eventsForEachOptionalAttendee.get(optionalAttendee);
         for (Event e : eventsWithAttendee){
           if (e.getWhen().overlaps(range)) {
-            counterOverlaps += 1;
+            numOverlaps += 1;
           }
         }
       }
 
-      if (counterOverlaps < minOverlaps) {
+      if (numOverlaps < minOverlaps) {
         minOverlapTimes.clear();
         minOverlapTimes.add(range);
-        minOverlaps = counterOverlaps;
+        minOverlaps = numOverlaps;
       }
-      if (counterOverlaps == minOverlaps) {
+      if (numOverlaps == minOverlaps) {
         minOverlapTimes.add(range);
       }
     }
