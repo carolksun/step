@@ -177,7 +177,7 @@ public final class FindMeetingQueryTest {
     // should see two options.
     //
     // Events  :       |----A----|
-    //                   |--B--|
+    //                   |--B--|    
     // Day     : |---------------------|
     // Options : |--1--|         |--2--|
 
@@ -478,6 +478,12 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void lotsOfAttendees() {
+    // Events  : |--A--|-|          |--A--|
+    // Events  :        |-B-|---|---------|      
+    // Events  : |----C----||---|
+    // Events  :           |-D--|
+    // Day     : |----------------------|
+    // Options :                |---|
 
     Collection<Event> events = Arrays.asList(
       new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
@@ -738,15 +744,15 @@ public final class FindMeetingQueryTest {
           Arrays.asList(PERSON_B, PERSON_C)),
       new Event("Event 6", TimeRange.fromStartDuration(TIME_0900AM, DURATION_1_HOUR),
           Arrays.asList(PERSON_D)),
-      new Event("Event 6", TimeRange.fromStartDuration(TIME_1000AM, DURATION_2_HOUR),
+      new Event("Event 7", TimeRange.fromStartDuration(TIME_1000AM, DURATION_2_HOUR),
           Arrays.asList(PERSON_D)),
-      new Event("Event 7", TimeRange.fromStartEnd(TIME_0300PM, TimeRange.END_OF_DAY, true),
+      new Event("Event 8", TimeRange.fromStartEnd(TIME_0300PM, TimeRange.END_OF_DAY, true),
           Arrays.asList(PERSON_A)),
-      new Event("Event 8", TimeRange.fromStartDuration(TIME_0100PM, DURATION_30_MINUTES),
+      new Event("Event 9", TimeRange.fromStartDuration(TIME_0100PM, DURATION_30_MINUTES),
           Arrays.asList(PERSON_B, PERSON_C)),
-      new Event("Event 9", TimeRange.fromStartDuration(TIME_0230PM, DURATION_90_MINUTES),
+      new Event("Event 10", TimeRange.fromStartDuration(TIME_0230PM, DURATION_90_MINUTES),
           Arrays.asList(PERSON_B)),
-      new Event("Event 9", TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true),
+      new Event("Event 11", TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true),
           Arrays.asList(PERSON_E))
     );
 

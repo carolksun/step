@@ -122,44 +122,6 @@ public final class FindMeetingQuery {
   }
 
   /** 
-   * Counts the number of optional attendees that can not make it to the meeting at
-   * the time range and compares it to the minimum number of optional attendees that
-   * can not make it for other time ranges.
-   *
-   * @param bestTimes collection which has the TimeRanges of meetings that has 
-   * the minOverlap attendees 
-   * @param events events of the day
-   * @param optional optional attendees for the meeting 
-   * @param range range in question to see how many optional attendees can not make it 
-   * @param minOverlaps current minimum number of optional attendees that can not make
-   * it to the meeting at the TimeRange
-   * @return the minimum of current range's overlaps and minOverlaps
-   */
-  private int optionalCounter(Collection<TimeRange> bestTimes,
-		  Collection<Event> events, Collection<String> optional,
-		  TimeRange range, int minOverlaps) {
-    int counterOverlaps = 0;
-    for (String opAttendee : optional) {
-      Collection<Event> eventsWithAttendee = eventFinderWithAttendee(events, opAttendee);
-      for (Event e : eventsWithAttendee){
-        if (e.getWhen().overlaps(range)) {
-          counterOverlaps += 1;
-        }
-      }
-    }
-
-    if (counterOverlaps < minOverlaps) {
-      bestTimes.clear();
-      bestTimes.add(range);
-      return counterOverlaps;
-    }
-    if (counterOverlaps == minOverlaps) {
-      bestTimes.add(range);
-    }
-    return minOverlaps;
-  }
-
-  /** 
    * Determines the TimeRanges where the mandatory and as many optional
    * attendees as possible can attend the meeting. It finds the time ranges that
    * all the mandatory attendees can attend. It then counts the number of 
@@ -185,9 +147,9 @@ public final class FindMeetingQuery {
     Collections.sort(eventsList, Event.ORDER_BY_START_ASCENDING); 
     List<TimeRange> possibleTimes = new ArrayList<>();
 
-    if (duration > TimeRange.WHOLE_DAY.duration() || duration < 0) {
+    if (duration > TimeRange.WHOLE_DAY.duration() || duration <= 0) {
     /**
-     * If the duration of meeting is longer than a day or less than 0 minutes,
+     * If the duration of meeting is longer than a day or non-positive 0 minutes,
      * then there are no meeting times. 
      */
       return possibleTimes;
@@ -214,7 +176,7 @@ public final class FindMeetingQuery {
     Collection<TimeRange> slotsOptional = intervalFinder(eventsList, newRequest);
     
     if (!slotsOptional.isEmpty()) {
-      // If there is a time with all mandatory and optional attendees, then return
+      // If there is a time with all mandatory and optional attendees, then return.
       return slotsOptional;
     }
 
@@ -229,41 +191,45 @@ public final class FindMeetingQuery {
     * optional event.
     */
 
-    Set<TimeRange> containedSet = new HashSet<>();
+    Set<TimeRange> splitRangeSet = new HashSet<>(availableTimesMand);
     for (String opAttendee : optional) {
       Collection<Event> eventsWithAttendee = eventFinderWithAttendee(eventsList, opAttendee);
       for (TimeRange range : availableTimesMand) {
-        containedSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));
+        splitRangeSet.addAll(rangeSplitByNestedEvents(eventsWithAttendee, range, duration));
       }
     }
-    List<TimeRange> contained = new ArrayList<>(containedSet);
+    List<TimeRange> splitRanges = new ArrayList<>(splitRangeSet);
 
     // Store the times with the minimum amount of event overlaps.
-    List<TimeRange> bestTimes = new ArrayList<>();
+    Set<TimeRange> minOverlapTimes = new HashSet<>();
     int minOverlaps = Integer.MAX_VALUE;
 
-    if (!contained.isEmpty()) {
-       /**
-        * If there are events that are contained within the mandatory ranges,
-        * for every range in contained, count the number of optional attendees 
-        * that would not be able to make it. Return the ranges
-        * with the least amount of overlaps with the optional attendees.
-        */
-      for (TimeRange c : contained) {
-        minOverlaps = optionalCounter(bestTimes, events, optional, c, minOverlaps);
+    /**
+    * If there are events that are contained within the mandatory ranges,
+    * for every range in contained, count the number of optional attendees 
+    * that would not be able to make it. Store the ranges with the least amount
+    * overalaps in minOverlapTimes.
+    */
+    for (TimeRange range : splitRanges) {
+      int counterOverlaps = 0;
+      for (String opAttendee : optional) {
+        Collection<Event> eventsWithAttendee = eventFinderWithAttendee(events, opAttendee);
+        for (Event e : eventsWithAttendee){
+          if (e.getWhen().overlaps(range)) {
+            counterOverlaps += 1;
+          }
+        }
       }
-      return bestTimes;
-    }
 
-     /**
-      * If there are no events that are contained within the mandatory ranges,
-      * for every range in the availableTimesMand, count the number of 
-      * optional attendees that would not be able to make it. Return the ranges
-      * with the least amount of overlaps with the optional attendees.
-      */
-    for (TimeRange range : availableTimesMand) {
-      minOverlaps = optionalCounter(bestTimes, events, optional, range, minOverlaps);
+      if (counterOverlaps < minOverlaps) {
+        minOverlapTimes.clear();
+        minOverlapTimes.add(range);
+        minOverlaps = counterOverlaps;
+      }
+      if (counterOverlaps == minOverlaps) {
+        minOverlapTimes.add(range);
+      }
     }
-    return bestTimes;
+    return new ArrayList<TimeRange>(minOverlapTimes);
   }
 }
